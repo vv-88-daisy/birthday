@@ -13,7 +13,7 @@
             overflow-x: hidden; background-color: #f3e5f5;
         }
 
-        /* 封面层 - 恢复星星雨 */
+        /* 封面层 - 确保星星动画存在 */
         #cover-page {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #d0c7d7 0%, #9372b0 100%);
@@ -35,49 +35,46 @@
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        /* 内容容器 - 强力居中 */
+        /* 内容容器 - 强制所有内容在手机屏幕水平正中 */
         #main-content {
             width: 100%; min-height: 100vh;
             display: flex; flex-direction: column;
-            align-items: center; justify-content: center; /* 垂直水平全部居中 */
+            align-items: center; justify-content: center; /* 核心居中 */
             opacity: 0; transition: opacity 2s ease;
             position: relative; padding: 20px 0;
         }
 
         .birthday-title {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.8rem, 13vw, 5rem); 
+            font-size: clamp(2.5rem, 12vw, 4.5rem); 
             color: #764ba2;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            margin: 0 0 20px 0;
             text-align: center;
+            width: 100%;
         }
 
-        /* 贴纸 - 改进为绝对定位，不随内容滚动 */
+        /* 贴纸 - 固定在四角 */
         .sticker { position: fixed; z-index: 20; pointer-events: none; }
-        .sticker img { width: 65px; height: 65px; object-fit: contain; }
+        .sticker img { width: 55px; height: 55px; object-fit: contain; }
         .s1 { top: 5%; left: 5%; }
         .s2 { top: 12%; right: 5%; }
         .s3 { bottom: 15%; left: 8%; }
         .s4 { bottom: 8%; right: 8%; }
 
-        /* 爱心墙容器 */
+        /* 爱心容器 - 确保在各种屏幕都居中 */
         .heart-wrapper {
             position: relative;
-            width: 350px; /* 固定宽度，方便计算内部坐标 */
-            height: 340px;
+            width: 320px; /* 适配手机宽度 */
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transform: scale(0.9); /* 如果还觉得大，改这个数字 */
-        }
-
-        @media (min-width: 600px) {
-            .heart-wrapper { transform: scale(1.4); margin: 60px 0; }
+            margin: 10px auto;
         }
 
         .photo-frame {
-            position: absolute; width: 52px; height: 52px;
+            position: absolute; width: 48px; height: 48px;
             border: 2px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.15);
             overflow: hidden; background: #fff;
             animation: heartBeat 2.5s infinite alternate ease-in-out;
@@ -85,24 +82,24 @@
         @keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.06); } }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 坐标微调，确保爱心形状圆润且居中 */
-        .p1 { left: 149px; top: 80px; }  .p2 { left: 95px; top: 35px; }  .p3 { left: 203px; top: 35px; }
-        .p4 { left: 41px; top: 25px; }   .p5 { left: 257px; top: 25px; } .p6 { left: 0px; top: 60px; }
-        .p7 { left: 298px; top: 60px; }  .p8 { left: -10px; top: 115px; } .p9 { left: 308px; top: 115px; }
-        .p10 { left: 15px; top: 185px; } .p11 { left: 283px; top: 185px; } .p12 { left: 55px; top: 245px; }
-        .p13 { left: 243px; top: 245px; } .p14 { left: 105px; top: 290px; } .p15 { left: 193px; top: 290px; }
-        .p16 { left: 149px; top: 325px; } .p17 { left: 20px; top: 90px; }   .p18 { left: 278px; top: 90px; }
+        /* 坐标微调 */
+        .p1 { left: 136px; top: 75px; } .p2 { left: 86px; top: 35px; } .p3 { left: 186px; top: 35px; }
+        .p4 { left: 36px; top: 25px; } .p5 { left: 236px; top: 25px; } .p6 { left: 0px; top: 55px; }
+        .p7 { left: 272px; top: 55px; } .p8 { left: -8px; top: 105px; } .p9 { left: 280px; top: 105px; }
+        .p10 { left: 12px; top: 170px; } .p11 { left: 260px; top: 170px; } .p12 { left: 50px; top: 225px; }
+        .p13 { left: 222px; top: 225px; } .p14 { left: 96px; top: 265px; } .p15 { left: 176px; top: 265px; }
+        .p16 { left: 136px; top: 295px; } .p17 { left: 18px; top: 85px; } .p18 { left: 254px; top: 85px; }
 
         .bubble-wish {
             position: fixed; bottom: -50px; background: rgba(255, 255, 255, 0.9);
-            padding: 8px 15px; border-radius: 20px; color: #764ba2; font-weight: bold;
-            animation: bubbleUp 6s linear forwards; z-index: 100; font-size: 0.85rem;
+            padding: 6px 12px; border-radius: 20px; color: #764ba2; font-weight: bold;
+            animation: bubbleUp 6s linear forwards; z-index: 100; font-size: 0.8rem;
         }
-        @keyframes bubbleUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100vh) scale(1.1); opacity: 0; } }
+        @keyframes bubbleUp { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
 
         .footer-text {
-            margin-top: 30px; color: #764ba2; font-weight: bold;
-            text-align: center; line-height: 1.8; z-index: 10;
+            margin-top: 20px; color: #764ba2; font-weight: bold;
+            text-align: center; line-height: 1.8;
         }
 
         .hide-cover { transform: translateY(-100%); opacity: 0; pointer-events: none; }
@@ -127,7 +124,6 @@
 
     <div id="main-content">
         <h1 class="birthday-title">Happy Birthday</h1>
-
         <div class="heart-wrapper">
             <div class="photo-frame p1"><img src="p1.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p2"><img src="p2.jpg" onerror="tryUpper(this)"></div>
@@ -148,15 +144,10 @@
             <div class="photo-frame p17"><img src="p17.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p18"><img src="p18.jpg" onerror="tryUpper(this)"></div>
         </div>
-        
-        <div class="footer-text">
-            祝你生日快乐 🌟<br>
-            天天开心！🎁
-        </div>
+        <div class="footer-text">祝你生日快乐 🌟<br>天天开心！🎁</div>
     </div>
 
     <script>
-        // 恢复封面的满天星动画
         function startStarRain() {
             const container = document.getElementById('cover-page');
             setInterval(() => {
@@ -164,14 +155,11 @@
                 star.className = 'floating-star';
                 const startPos = Math.random() * 100;
                 const duration = Math.random() * 3 + 4;
-                const size = Math.random() * 15 + 15;
                 star.style.left = startPos + 'vw';
-                star.style.fontSize = size + 'px';
-                star.style.animationDuration = `${duration}s, 2.5s`;
-                star.innerHTML ='<img src="star.png" width="30">';
+                star.innerHTML ='<img src="star.png" width="25">';
                 container.appendChild(star);
                 setTimeout(() => star.remove(), duration * 1000);
-            }, 400);
+            }, 500);
         }
 
         function tryUpper(img) {
@@ -182,7 +170,7 @@
 
         function openGift() {
             document.getElementById('bgm').play().catch(() => {});
-            document.getElementById('cover-page').classList.add('hide-cover');
+            document.getElementById('cover-page').style.display = 'none';
             document.getElementById('main-content').classList.add('show-content');
         }
 
@@ -196,7 +184,7 @@
             bubble.style.left = Math.random() * 60 + 20 + 'vw';
             container.appendChild(bubble);
             setTimeout(() => bubble.remove(), 6000);
-        }, 1800);
+        }, 2000);
 
         window.onload = startStarRain;
     </script>

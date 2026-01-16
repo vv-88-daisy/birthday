@@ -21,7 +21,7 @@
             z-index: 100;
         }
 
-        /* 核心光晕层 - 暖火色扩散 */
+        /* 核心光晕层 */
         #halo-effect {
             position: fixed;
             top: 44%; left: 50%;
@@ -37,10 +37,7 @@
             opacity: 0;
         }
 
-        .halo-run {
-            animation: haloAnimate 3s ease-in-out forwards;
-        }
-
+        .halo-run { animation: haloAnimate 3s ease-in-out forwards; }
         @keyframes haloAnimate {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
             20% { opacity: 1; }
@@ -50,98 +47,91 @@
 
         .cake-container { position: relative; cursor: pointer; z-index: 101; }
         .cake-img { width: 150px; height: 150px; display: block; }
-
         .candle-flame {
-            position: absolute; top: -15px; left: 46%;
-            transform: translateX(-50%) scale(0);
-            width: 25px; height: 42px;
-            background: #ffda44;
-            border-radius: 50% 50% 35% 35% / 80% 80% 20% 20%;
-            box-shadow: 0 -8px 25px #ff5e00, 0 0 20px #ffda44;
-            opacity: 0; transform-origin: bottom center;
+            position: absolute; top: -15px; left: 46%; transform: translateX(-50%) scale(0);
+            width: 25px; height: 42px; background: #ffda44; border-radius: 50% 50% 35% 35% / 80% 80% 20% 20%;
+            box-shadow: 0 -8px 25px #ff5e00, 0 0 20px #ffda44; opacity: 0; transform-origin: bottom center;
         }
-
-        .flame-blink {
-            animation: blink-action 0.2s ease-in-out 3;
-            opacity: 1 !important;
-            transform: translateX(-50%) scale(1.3) !important;
-        }
-        @keyframes blink-action {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+        .flame-blink { animation: blink-action 0.2s ease-in-out 3; opacity: 1 !important; transform: translateX(-50%) scale(1.3) !important; }
+        @keyframes blink-action { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* 主页面 */
         #main-content {
             width: 100%; height: 100vh;
             position: relative; background-color: #f7effa;
             visibility: hidden; opacity: 0;
-            filter: blur(10px);
-            transition: opacity 1.5s ease, filter 1.5s ease;
-            z-index: 10;
+            filter: blur(10px); transition: opacity 1.5s ease, filter 1.5s ease;
+            z-index: 10; display: flex; flex-direction: column; align-items: center;
         }
 
-        .content-reveal {
-            visibility: visible !important;
-            opacity: 1 !important;
-            filter: blur(0px) !important;
-        }
+        .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
-        /* 照片切换动画：保持较长时间的显现，缩短消失时间 */
-        @keyframes photoBreath {
-            0%, 100% { opacity: 0.4; transform: scale(0.98); }
-            30%, 70% { opacity: 1; transform: scale(1.02); }
-        }
-
-        .photo-frame {
-            position: absolute; width: 68px; height: 68px;
-            border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background: #fff; overflow: hidden;
-            animation: photoBreath 4s infinite ease-in-out;
-            opacity: 0.4; /* 基础亮度 */
-        }
-
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* 四个角落贴纸 */
-        .sticker { position: absolute; z-index: 20; pointer-events: none; }
-        .sticker img { width: 65px; height: 65px; }
-        .s1 { top: 2%; left: 2%; } .s2 { top: 2%; right: 2%; } 
-        .s3 { bottom: 12%; left: 2%; } .s4 { bottom: 12%; right: 2%; }
-
+        /* 标题优化：强制单行 */
         .birthday-title {
-            position: absolute; top: 6%; left: 50%; transform: translateX(-50%);
-            font-family: 'Dancing Script', cursive; font-size: 3rem; color: #764ba2;
+            position: absolute; top: 6%; 
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 12vw, 4rem); 
+            color: #764ba2;
+            white-space: nowrap; /* 禁止换行 */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            width: 90%; text-align: center;
         }
 
         .heart-wrapper {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -45%) scale(0.85);
-            width: 400px; height: 400px;
+            width: 400px; height: 450px;
         }
 
-        /* 坐标位置与交错动画：手动打乱延迟，确保任何时刻都有照片显现 */
-        .p1  { left: 167px; top: 90px;  animation-delay: 0.0s; }
-        .p2  { left: 100px; top: 40px;  animation-delay: 1.2s; }
-        .p3  { left: 234px; top: 40px;  animation-delay: 2.5s; }
-        .p4  { left: 34px;  top: 20px;  animation-delay: 0.4s; }
-        .p5  { left: 300px; top: 20px;  animation-delay: 1.8s; }
-        .p6  { left: -10px; top: 75px;  animation-delay: 3.1s; }
-        .p7  { left: 344px; top: 75px;  animation-delay: 0.7s; }
-        .p8  { left: -20px; top: 150px; animation-delay: 2.1s; }
-        .p9  { left: 354px; top: 150px; animation-delay: 3.4s; }
-        .p10 { left: 20px;  top: 230px; animation-delay: 1.0s; }
-        .p11 { left: 314px; top: 230px; animation-delay: 2.4s; }
-        .p12 { left: 75px;  top: 300px; animation-delay: 3.7s; }
-        .p13 { left: 259px; top: 300px; animation-delay: 0.3s; }
-        .p14 { left: 130px; top: 350px; animation-delay: 1.5s; }
-        .p15 { left: 204px; top: 350px; animation-delay: 2.8s; }
-        .p16 { left: 167px; top: 395px; animation-delay: 0.9s; }
-        .p17 { left: 10px;  top: 105px; animation-delay: 2.2s; }
-        .p18 { left: 324px; top: 105px; animation-delay: 3.5s; }
+        /* 照片切换动画 */
+        @keyframes photoBreath {
+            0%, 100% { opacity: 0.5; transform: scale(0.96); }
+            40%, 60% { opacity: 1; transform: scale(1.03); }
+        }
 
-        .footer-text { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); font-weight: bold; color: #764ba2; }
+        .photo-frame {
+            position: absolute; 
+            width: 82px; height: 82px; /* 照片放大 */
+            border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            background: #fff; overflow: hidden;
+            animation: photoBreath 4s infinite ease-in-out;
+            opacity: 0.5;
+        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* --- 紧凑版爱心坐标 --- */
+        /* 顶部两弧 */
+        .p1  { left: 159px; top: 90px;  animation-delay: 0.0s; } /* 中心顶 */
+        .p2  { left: 95px;  top: 45px;  animation-delay: 1.2s; } 
+        .p3  { left: 223px; top: 45px;  animation-delay: 2.5s; }
+        .p4  { left: 25px;  top: 55px;  animation-delay: 0.4s; }
+        .p5  { left: 293px; top: 55px;  animation-delay: 1.8s; }
+        /* 侧边最宽处 */
+        .p6  { left: -15px; top: 130px; animation-delay: 3.1s; }
+        .p7  { left: 333px; top: 130px; animation-delay: 0.7s; }
+        /* 侧边过渡 */
+        .p17 { left: 10px;  top: 210px; animation-delay: 2.2s; }
+        .p18 { left: 308px; top: 210px; animation-delay: 3.5s; }
+        /* 向下收窄 */
+        .p8  { left: 45px;  top: 285px; animation-delay: 2.1s; }
+        .p9  { left: 273px; top: 285px; animation-delay: 3.4s; }
+        .p10 { left: 85px;  top: 345px; animation-delay: 1.0s; }
+        .p11 { left: 233px; top: 345px; animation-delay: 2.4s; }
+        /* 底部收尖 */
+        .p12 { left: 125px; top: 395px; animation-delay: 3.7s; }
+        .p13 { left: 193px; top: 395px; animation-delay: 0.3s; }
+        .p14 { left: 159px; top: 440px; animation-delay: 1.5s; } /* 最底尖 */
+        /* 内部填充（解决空洞） */
+        .p15 { left: 95px;  top: 135px; animation-delay: 2.8s; }
+        .p16 { left: 223px; top: 135px; animation-delay: 0.9s; }
+
+        /* 贴纸 */
+        .sticker { position: absolute; z-index: 20; pointer-events: none; }
+        .sticker img { width: 70px; height: 70px; }
+        .s1 { top: 2%; left: 2%; } .s2 { top: 2%; right: 2%; } 
+        .s3 { bottom: 12%; left: 2%; } .s4 { bottom: 12%; right: 2%; }
+
+        .footer-text { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); font-weight: bold; color: #764ba2; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
@@ -164,7 +154,9 @@
         <div class="sticker s2"><img src="sticker2.png"></div>
         <div class="sticker s3"><img src="sticker3.png"></div>
         <div class="sticker s4"><img src="sticker4.png"></div>
+        
         <h1 class="birthday-title">Happy Birthday</h1>
+        
         <div class="heart-wrapper">
             <div class="photo-frame p1"><img src="p1.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p2"><img src="p2.jpg" onerror="tryUpper(this)"></div>
@@ -185,7 +177,8 @@
             <div class="photo-frame p17"><img src="p17.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p18"><img src="p18.jpg" onerror="tryUpper(this)"></div>
         </div>
-        <div class="footer-text">愿所有的记忆都温柔生辉 ✨</div>
+        
+        <div class="footer-text">愿所有的美好都如期而至 ✨</div>
     </div>
 
     <script>
@@ -202,7 +195,6 @@
                 document.getElementById('bgm').play().catch(() => {});
             }, 600);
 
-            // 显现页面逻辑：在光晕消散时无缝接入
             setTimeout(() => {
                 cover.style.display = 'none';
                 main.classList.add('content-reveal');

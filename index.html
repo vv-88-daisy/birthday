@@ -10,22 +10,26 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'PingFang SC', sans-serif;
-            overflow-x: hidden; background-color: #f3e5f5;
+            overflow: hidden; background-color: #f3e5f5;
         }
 
-        /* 封面层 - 确保星星动画存在 */
+        /* 封面层 */
         #cover-page {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #d0c7d7 0%, #9372b0 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 999; transition: transform 1.2s ease, opacity 1s;
+            z-index: 999;
         }
+
+        /* 漂浮星星动画 */
         .floating-star {
             position: absolute; bottom: -50px; pointer-events: none; z-index: 1000;
-            animation: floatUp linear infinite, sway ease-in-out infinite;
+            animation: floatUp linear infinite;
         }
-        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-110vh); opacity: 0; } }
-        @keyframes sway { 0%, 100% { margin-left: 0px; } 50% { margin-left: 60px; } }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
 
         .open-btn {
             padding: 15px 40px; background: white; color: #e36d29;
@@ -35,43 +39,42 @@
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        /* 内容容器 - 强制所有内容在手机屏幕水平正中 */
+        /* 内容容器 */
         #main-content {
-            width: 100%; min-height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center; /* 核心居中 */
-            opacity: 0; transition: opacity 2s ease;
-            position: relative; padding: 20px 0;
+            width: 100%; height: 100vh;
+            display: none; position: relative;
+            background-color: #f3e5f5;
         }
 
+        /* 绝对居中定位 - 解决所有偏位问题 */
         .birthday-title {
+            position: absolute; top: 8%; left: 50%;
+            transform: translateX(-50%);
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 12vw, 4.5rem); 
-            color: #764ba2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin: 0 0 20px 0;
-            text-align: center;
-            width: 100%;
+            font-size: clamp(2.5rem, 12vw, 4rem); 
+            color: #764ba2; text-align: center; width: 100%;
         }
 
-        /* 贴纸 - 固定在四角 */
-        .sticker { position: fixed; z-index: 20; pointer-events: none; }
-        .sticker img { width: 55px; height: 55px; object-fit: contain; }
-        .s1 { top: 5%; left: 5%; }
-        .s2 { top: 12%; right: 5%; }
-        .s3 { bottom: 15%; left: 8%; }
-        .s4 { bottom: 8%; right: 8%; }
-
-        /* 爱心容器 - 确保在各种屏幕都居中 */
         .heart-wrapper {
-            position: relative;
-            width: 320px; /* 适配手机宽度 */
-            height: 320px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px auto;
+            position: absolute; top: 52%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9); /* 整体居中并微调大小 */
+            width: 320px; height: 320px;
         }
+
+        .footer-text {
+            position: absolute; bottom: 8%; left: 50%;
+            transform: translateX(-50%);
+            color: #764ba2; font-weight: bold; text-align: center; width: 100%;
+            line-height: 1.6;
+        }
+
+        /* 贴纸 - 固定四角 */
+        .sticker { position: fixed; z-index: 20; pointer-events: none; }
+        .sticker img { width: 60px; height: 60px; object-fit: contain; }
+        .s1 { top: 2%; left: 2%; }
+        .s2 { top: 2%; right: 2%; }
+        .s3 { bottom: 12%; left: 2%; }
+        .s4 { bottom: 12%; right: 2%; }
 
         .photo-frame {
             position: absolute; width: 48px; height: 48px;
@@ -79,10 +82,10 @@
             overflow: hidden; background: #fff;
             animation: heartBeat 2.5s infinite alternate ease-in-out;
         }
-        @keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.06); } }
+        @keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.08); } }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 坐标微调 */
+        /* 爱心坐标 */
         .p1 { left: 136px; top: 75px; } .p2 { left: 86px; top: 35px; } .p3 { left: 186px; top: 35px; }
         .p4 { left: 36px; top: 25px; } .p5 { left: 236px; top: 25px; } .p6 { left: 0px; top: 55px; }
         .p7 { left: 272px; top: 55px; } .p8 { left: -8px; top: 105px; } .p9 { left: 280px; top: 105px; }
@@ -93,17 +96,9 @@
         .bubble-wish {
             position: fixed; bottom: -50px; background: rgba(255, 255, 255, 0.9);
             padding: 6px 12px; border-radius: 20px; color: #764ba2; font-weight: bold;
-            animation: bubbleUp 6s linear forwards; z-index: 100; font-size: 0.8rem;
+            animation: bubbleUp 6s linear forwards; z-index: 100;
         }
         @keyframes bubbleUp { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
-
-        .footer-text {
-            margin-top: 20px; color: #764ba2; font-weight: bold;
-            text-align: center; line-height: 1.8;
-        }
-
-        .hide-cover { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-        .show-content { opacity: 1 !important; }
     </style>
 </head>
 <body>
@@ -117,13 +112,14 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="sticker s1"><img src="sticker1.png"></div>
-    <div class="sticker s2"><img src="sticker2.png"></div>
-    <div class="sticker s3"><img src="sticker3.png"></div>
-    <div class="sticker s4"><img src="sticker4.png"></div>
-
     <div id="main-content">
+        <div class="sticker s1"><img src="sticker1.png"></div>
+        <div class="sticker s2"><img src="sticker2.png"></div>
+        <div class="sticker s3"><img src="sticker3.png"></div>
+        <div class="sticker s4"><img src="sticker4.png"></div>
+
         <h1 class="birthday-title">Happy Birthday</h1>
+        
         <div class="heart-wrapper">
             <div class="photo-frame p1"><img src="p1.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p2"><img src="p2.jpg" onerror="tryUpper(this)"></div>
@@ -144,22 +140,25 @@
             <div class="photo-frame p17"><img src="p17.jpg" onerror="tryUpper(this)"></div>
             <div class="photo-frame p18"><img src="p18.jpg" onerror="tryUpper(this)"></div>
         </div>
-        <div class="footer-text">祝你生日快乐 🌟<br>天天开心！🎁</div>
+
+        <div class="footer-text">每一颗星星都代表一个愿望 🌟<br>祝你生日快乐，天天开心！🎁</div>
     </div>
 
     <script>
-        function startStarRain() {
-            const container = document.getElementById('cover-page');
+        // 核心：生成漂浮星星的函数
+        function createStars() {
+            const container = document.body;
             setInterval(() => {
                 const star = document.createElement('div');
                 star.className = 'floating-star';
-                const startPos = Math.random() * 100;
+                star.style.left = Math.random() * 100 + 'vw';
                 const duration = Math.random() * 3 + 4;
-                star.style.left = startPos + 'vw';
-                star.innerHTML ='<img src="star.png" width="25">';
+                star.style.animationDuration = duration + 's';
+                // 使用你文件夹里的 star.png
+                star.innerHTML = '<img src="star.png" width="25" style="opacity:0.8;">';
                 container.appendChild(star);
                 setTimeout(() => star.remove(), duration * 1000);
-            }, 500);
+            }, 600);
         }
 
         function tryUpper(img) {
@@ -171,22 +170,26 @@
         function openGift() {
             document.getElementById('bgm').play().catch(() => {});
             document.getElementById('cover-page').style.display = 'none';
-            document.getElementById('main-content').classList.add('show-content');
+            document.getElementById('main-content').style.display = 'block';
+            createStars(); // 开启后立即开始飘星星
         }
 
+        // 祝福气泡
         const wishes = ["永远开心 🎈", "万事胜意 ✨", "平安喜乐 🎁", "暴富暴美 💰", "眼里有光 ⭐", "好运连连 🍀"];
         setInterval(() => {
-            const container = document.getElementById('main-content');
-            if(getComputedStyle(container).opacity === "0") return;
+            const content = document.getElementById('main-content');
+            if(content.style.display === 'none') return;
             const bubble = document.createElement('div');
             bubble.className = 'bubble-wish';
             bubble.innerText = wishes[Math.floor(Math.random() * wishes.length)];
             bubble.style.left = Math.random() * 60 + 20 + 'vw';
-            container.appendChild(bubble);
+            content.appendChild(bubble);
             setTimeout(() => bubble.remove(), 6000);
         }, 2000);
 
-        window.onload = startStarRain;
+        // 页面加载完也先跑起来，防止封面没星星
+        window.onload = createStars;
     </script>
 </body>
 </html>
+

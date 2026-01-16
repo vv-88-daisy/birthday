@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专属你的星星惊喜</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'PingFang SC', sans-serif;
+            overflow-x: hidden; background-color: #fdfcfb;
+        }
+
+        /* 封面层 */
+        #cover-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #d0c7d7 0%, #9372b0 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 999; transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s;
+        }
+
+        .open-btn {
+            padding: 15px 45px; background: white; color: #e36d29;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* 漂浮星星 */
+        .floating-star {
+            position: absolute; bottom: -50px; pointer-events: none; z-index: 1000;
+            animation: floatUp linear infinite, sway ease-in-out infinite;
+        }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-110vh); opacity: 0; } }
+        @keyframes sway { 0%, 100% { margin-left: 0px; } 50% { margin-left: 60px; } }
+
+        /* 内容层 */
+        #main-content {
+            min-height: 100vh; padding: 40px 10px;
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; transition: opacity 2s ease; background-color: #f3e5f5;
+            position: relative;
+        }
+
+        .birthday-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 12vw, 6rem); 
+            color: #764ba2;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            margin: 40px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .heart-wall {
+            position: relative;
+            width: 500px; height: 400px;
+            margin: 60px auto;
+            transform: scale(1.2); 
+            z-index: 5;
+        }
+
+        .photo-frame {
+            position: absolute; width: 65px; height: 65px;
+            border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden; transition: all 0.5s ease;
+            animation: heartBeat 2s infinite alternate;
+        }
+        @keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 18张照片坐标保持不变 */
+        .p1 { left: 217px; top: 100px; } .p2 { left: 155px; top: 50px; } .p3 { left: 280px; top: 50px; }
+        .p4 { left: 90px; top: 35px; } .p5 { left: 345px; top: 35px; } .p6 { left: 30px; top: 70px; }
+        .p7 { left: 405px; top: 70px; } .p8 { left: 10px; top: 140px; } .p9 { left: 425px; top: 140px; }
+        .p10 { left: 35px; top: 220px; } .p11 { left: 400px; top: 220px; } .p12 { left: 90px; top: 290px; }
+        .p13 { left: 345px; top: 290px; } .p14 { left: 155px; top: 340px; } .p15 { left: 280px; top: 340px; }
+        .p16 { left: 217px; top: 385px; } .p17 { left: 55px; top: 110px; } .p18 { left: 380px; top: 110px; }
+
+        .bubble-wish {
+            position: fixed; bottom: -50px; background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px; border-radius: 20px; color: #764ba2; font-weight: bold;
+            animation: bubbleUp 6s linear forwards; z-index: 10;
+        }
+        @keyframes bubbleUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100vh) scale(1.2); opacity: 0; } }
+
+        /* --- 修改后的贴纸样式 --- */
+        .sticker {
+            position: absolute;
+            pointer-events: none;
+            animation: rotateSticker 8s linear infinite; /* 旋转变慢更柔和 */
+            opacity: 0.9;
+            z-index: 2;
+        }
+        .sticker img {
+            display: block;
+            width: 120px;  /* 你可以在这里统一改贴纸图片的大小 */
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        @keyframes rotateSticker { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .hide-cover { transform: translateY(-100%) !important; opacity: 0; pointer-events: none; }
+        .show-content { opacity: 1 !important; }
+    </style>
+</head>
+<body>
+
+    <div id="cover-page">
+        <h1>恋～送你满天星✨</h1>
+        <button class="open-btn" onclick="openGift()">点击开启</button>
+    </div>
+
+    <audio id="bgm" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="main-content">
+        <h1 class="birthday-title">Happy Birthday</h1>
+
+        <div class="sticker" style="top: 10%; left: 5%;"><img src="sticker1.png"></div>
+        <div class="sticker" style="top: 15%; right: 5%;"><img src="sticker2.png"></div>
+        <div class="sticker" style="bottom: 20%; left: 8%;"><img src="sticker3.png"></div>
+        <div class="sticker" style="bottom: 15%; right: 8%;"><img src="sticker4.png"></div>
+
+        <div class="heart-wall" id="heartWall">
+            <div class="photo-frame p1"><img src="p1.jpg"></div>
+            <div class="photo-frame p2"><img src="p2.jpg"></div>
+            <div class="photo-frame p3"><img src="p3.jpg"></div>
+            <div class="photo-frame p4"><img src="p4.jpg"></div>
+            <div class="photo-frame p5"><img src="p5.jpg"></div>
+            <div class="photo-frame p6"><img src="p6.jpg"></div>
+            <div class="photo-frame p7"><img src="p7.jpg"></div>
+            <div class="photo-frame p8"><img src="p8.jpg"></div>
+            <div class="photo-frame p9"><img src="p9.jpg"></div>
+            <div class="photo-frame p10"><img src="p10.jpg"></div>
+            <div class="photo-frame p11"><img src="p11.jpg"></div>
+            <div class="photo-frame p12"><img src="p12.jpg"></div>
+            <div class="photo-frame p13"><img src="p13.jpg"></div>
+            <div class="photo-frame p14"><img src="p14.jpg"></div>
+            <div class="photo-frame p15"><img src="p15.jpg"></div>
+            <div class="photo-frame p16"><img src="p16.jpg"></div>
+            <div class="photo-frame p17"><img src="p17.jpg"></div>
+            <div class="photo-frame p18"><img src="p18.jpg"></div>
+        </div>
+        
+        <div style="margin: 80px 0 50px 0; color: #764ba2; font-weight: bold; text-align: center; line-height: 2;">
+            每一颗星星都代表一个愿望 🌟<br>
+            很高兴认识你！🎁
+        </div>
+    </div>
+
+    <script>
+        function startStarRain() {
+            const container = document.getElementById('cover-page');
+            setInterval(() => {
+                const star = document.createElement('div');
+                star.className = 'floating-star';
+                const startPos = Math.random() * 100;
+                const duration = Math.random() * 3 + 4;
+                const size = Math.random() * 20 + 20;
+                star.style.left = startPos + 'vw';
+                star.style.fontSize = size + 'px';
+                star.style.animationDuration = `${duration}s, 2s`;
+                star.innerHTML ='<img src="star.png" width="40">';
+                container.appendChild(star);
+                setTimeout(() => star.remove(), duration * 1000);
+            }, 300);
+        }
+
+        function openGift() {
+            const audio = document.getElementById('bgm');
+            audio.play().catch(e => {});
+            document.getElementById('cover-page').classList.add('hide-cover');
+            document.getElementById('main-content').classList.add('show-content');
+        }
+
+        const wishes = ["永远开心 🎈", "万事胜意 ✨", "平安喜乐 🎁", "暴富暴美 💰", "眼里有光 ⭐", "好运连连 🍀"];
+        function createBubble() {
+            const container = document.getElementById('main-content');
+            if(getComputedStyle(container).opacity === "0") return;
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble-wish';
+            bubble.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+            bubble.style.left = Math.random() * 80 + 10 + 'vw';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 6000);
+        }
+
+        const myImages = ["p1.jpg", "p2.jpg", "p3.jpg", "p4.jpg", "p5.jpg", "p6.jpg", "p7.jpg", "p8.jpg", "p9.jpg", "p10.jpg", "p11.jpg", "p12.jpg", "p13.jpg", "p14.jpg", "p15.jpg", "p16.jpg", "p17.jpg", "p18.jpg"];
+        function shufflePhotos() {
+            const frames = document.querySelectorAll('.photo-frame img');
+            frames.forEach(img => {
+                if(Math.random() > 0.8) {
+                    img.src = myImages[Math.floor(Math.random() * myImages.length)];
+                }
+            });
+        }
+
+        window.onload = () => {
+            startStarRain();
+            setInterval(createBubble, 1200);
+            setInterval(shufflePhotos, 3000);
+        };
+    </script>
+</body>
+</html>

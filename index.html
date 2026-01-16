@@ -6,7 +6,7 @@
     <title>专属你的星星惊喜</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        body, html {
+               body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'PingFang SC', sans-serif;
             overflow-x: hidden; background-color: #fdfcfb;
@@ -39,7 +39,7 @@
 
         /* 内容层 */
         #main-content {
-            min-height: 100vh; padding: 40px 10px;
+            min-height: 100vh; padding: 20px 10px;
             display: flex; flex-direction: column; align-items: center;
             opacity: 0; transition: opacity 2s ease; background-color: #f3e5f5;
             position: relative;
@@ -47,20 +47,27 @@
 
         .birthday-title {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(3rem, 12vw, 6rem); 
+            font-size: clamp(2.5rem, 10vw, 5rem); 
             color: #764ba2;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
-            margin: 40px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
             text-align: center;
-            width: 100%;
         }
 
+        /* --- 修正后的爱心墙：使用 scale 自动适应手机屏幕 --- */
         .heart-wall {
             position: relative;
-            width: 500px; height: 400px;
-            margin: 60px auto;
-            transform: scale(1.2); 
+            width: 500px; height: 450px; /* 原始比例不动 */
+            margin: 20px auto;
+            /* 手机端缩小，电脑端保持 */
+            transform: scale(0.65); 
+            transform-origin: center top; /* 从顶部中心缩放 */
             z-index: 5;
+        }
+
+        /* 如果屏幕宽度大于 600px (电脑/平板)，爱心变大一点 */
+        @media (min-width: 600px) {
+            .heart-wall { transform: scale(1.1); margin: 60px auto; }
         }
 
         .photo-frame {
@@ -72,7 +79,7 @@
         @keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.05); } }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 18张照片坐标保持不变 */
+        /* 坐标坐标保持原样，靠父元素的 scale 自动适配 */
         .p1 { left: 217px; top: 100px; } .p2 { left: 155px; top: 50px; } .p3 { left: 280px; top: 50px; }
         .p4 { left: 90px; top: 35px; } .p5 { left: 345px; top: 35px; } .p6 { left: 30px; top: 70px; }
         .p7 { left: 405px; top: 70px; } .p8 { left: 10px; top: 140px; } .p9 { left: 425px; top: 140px; }
@@ -83,29 +90,32 @@
         .bubble-wish {
             position: fixed; bottom: -50px; background: rgba(255, 255, 255, 0.9);
             padding: 8px 15px; border-radius: 20px; color: #764ba2; font-weight: bold;
-            animation: bubbleUp 6s linear forwards; z-index: 10;
+            animation: bubbleUp 6s linear forwards; z-index: 10; font-size: 0.9rem;
         }
         @keyframes bubbleUp { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100vh) scale(1.2); opacity: 0; } }
 
-        /* --- 修改后的贴纸样式 --- */
+        /* --- 修正后的贴纸：手机端缩小 --- */
         .sticker {
             position: absolute;
             pointer-events: none;
-            animation: rotateSticker 8s linear infinite; /* 旋转变慢更柔和 */
-            opacity: 0.9;
+            animation: rotateSticker 12s linear infinite;
+            opacity: 0.8;
             z-index: 2;
         }
         .sticker img {
             display: block;
-            width: 120px;  /* 你可以在这里统一改贴纸图片的大小 */
-            height: 120px;
+            width: 70px;  /* 手机端缩小到 70px */
+            height: 70px;
             object-fit: contain;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        @media (min-width: 600px) {
+            .sticker img { width: 120px; height: 120px; } /* 电脑端恢复大尺寸 */
         }
         @keyframes rotateSticker { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .hide-cover { transform: translateY(-100%) !important; opacity: 0; pointer-events: none; }
         .show-content { opacity: 1 !important; }
+
     </style>
 </head>
 <body>

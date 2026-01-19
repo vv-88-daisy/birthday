@@ -371,24 +371,46 @@ document.querySelectorAll('.photo-frame').forEach(frame => {
 });
 
 
-        function createWish() {
-            const content = wishes[Math.floor(Math.random() * wishes.length)];
-            const wish = document.createElement('div');
-            wish.className = 'floating-wish';
-            wish.innerText = content;
-            wish.style.left = Math.random() * 60 + 10 + '%';
-            wish.style.color = colors[Math.floor(Math.random() * colors.length)];
-            // 速度调慢：10-14秒上升
-            wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
-            
-            wish.onclick = (e) => {
-                e.stopPropagation();
-                showDetail(content);
-            };
+        // 记录当前屏幕上正在显示的祝福语内容
+let activeWishes = []; 
 
-            document.getElementById('main-content').appendChild(wish);
-            setTimeout(() => { wish.remove(); }, 15000);
-        }
+function createWish() {
+    const mainContent = document.getElementById('main-content');
+    // 1. 数量控制：如果当前屏幕已有 5 条，则不产生新的
+    if (activeWishes.length >= 5) return;
+
+    // 2. 去重逻辑：从全部祝福语中筛选出当前没在飞的
+    const availableWishes = wishes.filter(w => !activeWishes.includes(w));
+    
+    // 如果所有祝福语都在飞（虽然在这个设置下不太可能），就先不生成
+    if (availableWishes.length === 0) return;
+
+    const content = availableWishes[Math.floor(Math.random() * availableWishes.length)];
+    
+    // 将选中的内容加入“正在显示”列表
+    activeWishes.push(content);
+
+    const wish = document.createElement('div');
+    wish.className = 'floating-wish';
+    wish.innerText = content;
+    wish.style.left = Math.random() * 60 + 10 + '%';
+    wish.style.color = colors[Math.floor(Math.random() * colors.length)];
+    wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
+    
+    wish.onclick = (e) => {
+        e.stopPropagation();
+        showDetail(content);
+    };
+
+    mainContent.appendChild(wish);
+
+    // 当动画结束（气泡消失）时，从记录中移除该内容，并移除DOM
+    setTimeout(() => {
+        activeWishes = activeWishes.filter(item => item !== content);
+        wish.remove();
+    }, 15000); 
+}
+
 
         function handleCandleClick() {
             const flame = document.getElementById('flame');

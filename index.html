@@ -92,42 +92,42 @@
         }
 
         /* --- 漂浮祝福语样式 --- */
-        .floating-wish {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(2px);
-            /* 减少内边距(留白)，缩窄气泡 */
-            padding: 5px 12px; 
-            border-radius: 15px; /* 相应调小圆角 */
-            border: 1.5px solid #fff;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            
-            /* 限制最大宽度，防止长句撑满屏幕 */
-            max-width: 160px; 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            
-            /* 减小字号 */
-            font-size: 0.8rem; 
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 40;
-            
-            animation: floatUp 12s linear infinite; 
-            opacity: 0;
-            pointer-events: auto;
-        }
+        /* 修改后的音符/图案祝福语样式 */
+.floating-wish {
+    position: absolute;
+    width: 60px;  /* 根据你的图片尺寸调整 */
+    height: 60px;
+    cursor: pointer;
+    z-index: 40;
+    /* 移除背景、边框和原本的文字显示 */
+    background: none;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: floatUp 12s linear infinite;
+    pointer-events: auto;
+}
 
-        /* 气泡下方的小尾巴也相应调小 */
-        .floating-wish::after {
-            content: '';
-            position: absolute;
-            bottom: -6px; left: 15px;
-            border-width: 6px 6px 0;
-            border-style: solid;
-            border-color: rgba(255,255,255,0.9) transparent transparent;
-        }
+/* 使用伪元素显示你上传的图案 */
+.floating-wish::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('note.png') no-repeat center/contain; /* 替换为你的图案文件名 */
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
+
+/* 隐藏原本直接显示的文字 */
+.floating-wish .wish-text-hidden {
+    display: none;
+}
+
+/* 移除原本气泡的小尾巴 */
+.floating-wish::after { display: none !important; }
+
 
 
         @keyframes floatUp {
@@ -264,6 +264,11 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
+    <audio id="bgm" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+<audio id="voice-player"></audio>
+
+
     <div id="main-content">
         <div class="sticker s1"><img src="sticker1.png"></div>
         <div class="sticker s2"><img src="sticker2.png"></div>
@@ -320,24 +325,82 @@
         }
         initStars();
 
-        const wishes = [
-            "🎂 生日快乐！希望你新的一岁眼里有星辰，心中有大海。", 
-            "✨ 万事胜意：祝你在未来的日子里，所有努力都不被辜负。", 
-            "🌈 永远开心：愿你每天的心情都像彩虹一样灿烂夺目。", 
-            "🍎 平平安安：健健康康才是最重要的事情呀！", 
-            "💫 闪闪发光：在这个平凡的世界里，你始终是最特别的那一个。", 
-            "🌸 顺风顺水：愿你未来的人生道路平坦，遇见的都是美好。", 
-            "🎁 惊喜不断：希望每一份礼物都能带给你久违的感动。", 
-            "❤️ 岁岁平安：年年有今日，岁岁有今朝，永远年轻。"
-        ];
         const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#764ba2", "#d4a5a5", "#e67e22"];
 
-        function showDetail(content) {
-            const modal = document.getElementById('wish-modal');
-            const modalText = document.getElementById('modal-text');
-            modalText.innerText = content;
-            modal.style.display = 'flex';
-        }
+        // 1. 配置祝福语和对应的音频文件（确保文件名正确）
+const wishData = [
+    { text: "幸福与时间长青💗", audio: "voice2.m4a" },
+    { text: "祝大姨妈新的一岁：升职加薪不加班，早睡早起不脱发，钱包鼓鼓，生龙活虎！", audio: "voice3.m4a" },
+    { text: "25岁快乐！6年时光一晃而过，谢谢你陪我走过这么多日子，新的一岁继续一起吃吃喝喝，祝你好运连连，好事扎堆来，想买星星人就买星星人，以后的路都要顺畅一些", audio: "voice4.m4a" },
+    { text: "永永远远仅限你，永远的陪伴、永远的支持", audio: "voice5.m4a" },
+
+];
+
+let activeIndices = []; // 记录当前屏幕上正在飞的索引
+
+function createWish() {
+    const mainContent = document.getElementById('main-content');
+    if (activeIndices.length >= 5) return;
+
+    // 去重逻辑
+    const availableIndices = wishData.map((_, i) => i).filter(i => !activeIndices.includes(i));
+    if (availableIndices.length === 0) return;
+
+    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    const data = wishData[randomIndex];
+    activeIndices.push(randomIndex);
+
+    const wish = document.createElement('div');
+    wish.className = 'floating-wish';
+    wish.style.left = Math.random() * 70 + 10 + '%';
+    // 随机一个微小的旋转角，让飘动更自然
+    wish.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+    wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
+    
+    // 点击事件
+    wish.onclick = (e) => {
+        e.stopPropagation();
+        
+        // 1. 弹出文字
+        showDetail(data.text);
+        
+        // 2. 播放音频逻辑
+        const voicePlayer = document.getElementById('voice-player');
+        const bgm = document.getElementById('bgm');
+        
+        voicePlayer.src = data.audio;
+        
+        // 播放时降低 BGM 音量，突出人声
+        bgm.volume = 0.2; 
+        voicePlayer.play();
+        
+        // 音频结束时恢复 BGM 音量
+        voicePlayer.onended = () => { bgm.volume = 1.0; };
+    };
+
+    mainContent.appendChild(wish);
+
+    setTimeout(() => {
+        activeIndices = activeIndices.filter(i => i !== randomIndex);
+        wish.remove();
+    }, 15000); 
+}
+
+// 确保关闭弹窗时也停止音频（修改现有的显示函数或在 HTML onclick 里处理）
+function showDetail(content) {
+    const modal = document.getElementById('wish-modal');
+    const modalText = document.getElementById('modal-text');
+    modalText.innerText = content;
+    modal.style.display = 'flex';
+    
+    // 修改弹窗点击事件：关闭时也停掉声音
+    modal.onclick = () => {
+        modal.style.display = 'none';
+        document.getElementById('voice-player').pause();
+        document.getElementById('bgm').volume = 1.0;
+    };
+}
+
 
         // 在原有脚本末尾添加
 
@@ -370,46 +433,6 @@ document.querySelectorAll('.photo-frame').forEach(frame => {
     });
 });
 
-
-        // 记录当前屏幕上正在显示的祝福语内容
-let activeWishes = []; 
-
-function createWish() {
-    const mainContent = document.getElementById('main-content');
-    // 1. 数量控制：如果当前屏幕已有 5 条，则不产生新的
-    if (activeWishes.length >= 5) return;
-
-    // 2. 去重逻辑：从全部祝福语中筛选出当前没在飞的
-    const availableWishes = wishes.filter(w => !activeWishes.includes(w));
-    
-    // 如果所有祝福语都在飞（虽然在这个设置下不太可能），就先不生成
-    if (availableWishes.length === 0) return;
-
-    const content = availableWishes[Math.floor(Math.random() * availableWishes.length)];
-    
-    // 将选中的内容加入“正在显示”列表
-    activeWishes.push(content);
-
-    const wish = document.createElement('div');
-    wish.className = 'floating-wish';
-    wish.innerText = content;
-    wish.style.left = Math.random() * 60 + 10 + '%';
-    wish.style.color = colors[Math.floor(Math.random() * colors.length)];
-    wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
-    
-    wish.onclick = (e) => {
-        e.stopPropagation();
-        showDetail(content);
-    };
-
-    mainContent.appendChild(wish);
-
-    // 当动画结束（气泡消失）时，从记录中移除该内容，并移除DOM
-    setTimeout(() => {
-        activeWishes = activeWishes.filter(item => item !== content);
-        wish.remove();
-    }, 15000); 
-}
 
 
         function handleCandleClick() {

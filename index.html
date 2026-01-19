@@ -69,11 +69,10 @@
         .flame-blink { animation: blink-action 0.2s ease-in-out 3; opacity: 1 !important; transform: translateX(-50%) scale(1.3) !important; }
         @keyframes blink-action { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* 主页面 - 背景改为和封面一样的渐变 */
+        /* 主页面 */
         #main-content {
             width: 100%; height: 100vh;
-            position: relative; 
-            background: linear-gradient(180deg, #8b74b8 0%, #d3b3f3 100%);
+            position: relative; background-color: #ded3e2;
             visibility: hidden; opacity: 0;
             filter: blur(10px); transition: opacity 1.5s ease, filter 1.5s ease;
             z-index: 10; display: flex; flex-direction: column; align-items: center;
@@ -81,55 +80,55 @@
 
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
-        /* Happy Birthday 加闪光效果 */
         .birthday-title {
-            position: absolute; top: 6%; 
+            position: absolute; top: 8%; 
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.5rem, 13vw, 4.5rem); 
-            /* 鎏金闪光渐变 */
-            background: linear-gradient(90deg, #d2a941, #f0dc92, #d2a941, #f0dc92, #d2a941);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
+            font-size: clamp(2rem, 12vw, 4rem); 
+            color: #764ba2;
             white-space: nowrap;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             width: 90%; text-align: center;
             z-index: 30;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
         /* --- 漂浮祝福语样式 --- */
-        .floating-wish {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            z-index: 40;
-            background: none;
-            border: none;
-            box-shadow: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: floatUp 12s linear infinite;
-            pointer-events: auto;
-        }
+        /* 修改后的音符/图案祝福语样式 */
+.floating-wish {
+    position: absolute;
+    width: 40px;  /* 根据你的图片尺寸调整 */
+    height: 60px;
+    cursor: pointer;
+    z-index: 40;
+    /* 移除背景、边框和原本的文字显示 */
+    background: none;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: floatUp 12s linear infinite;
+    pointer-events: auto;
+}
 
-        .floating-wish::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('note.png') no-repeat center/contain;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
-        }
+/* 使用伪元素显示你上传的图案 */
+.floating-wish::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('note.png') no-repeat center/contain; /* 替换为你的图案文件名 */
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
 
-        .floating-wish .wish-text-hidden { display: none; }
-        .floating-wish::after { display: none !important; }
+/* 隐藏原本直接显示的文字 */
+.floating-wish .wish-text-hidden {
+    display: none;
+}
+
+/* 移除原本气泡的小尾巴 */
+.floating-wish::after { display: none !important; }
+
+
 
         @keyframes floatUp {
             0% { transform: translateY(105vh); opacity: 0; }
@@ -155,7 +154,7 @@
         /* 爱心整体缩小 */
         .heart-wrapper {
             position: absolute; top: 48%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.75);
+            transform: translate(-50%, -50%) scale(0.75); /* 从0.85缩小到0.75 */
             width: 400px; height: 450px;
         }
 
@@ -174,7 +173,7 @@
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 照片位置 */
+        /* 照片位置保持原样 */
         .p1  { left: 159px; top: 90px;  animation-delay: 0.0s; }
         .p2  { left: 95px;  top: 45px;  animation-delay: 1.2s; } 
         .p3  { left: 223px; top: 45px;  animation-delay: 2.5s; }
@@ -199,24 +198,50 @@
         .s1 { top: 2%; left: 2%; } .s2 { top: 2%; right: 2%; } 
         .s3 { bottom: 12%; left: 2%; } .s4 { bottom: 12%; right: 2%; }
 
-        .footer-text { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); font-weight: bold; color: #ffd700; text-align: center; width: 100%; z-index: 30; }
+        .footer-text { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); font-weight: bold; color: #764ba2; text-align: center; width: 100%; z-index: 30; }
 
         /* 图片预览样式 */
-        #image-preview-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); display: none;
-            justify-content: center; align-items: center; z-index: 3000;
-            cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease;
-        }
-        #image-preview-overlay.show { display: flex; opacity: 1; }
-        #preview-img {
-            max-width: 90%; max-height: 80%; border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2); transform: scale(0.8);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #image-preview-overlay.show #preview-img { transform: scale(1); }
-        .photo-frame { cursor: zoom-in; transition: transform 0.2s; }
-        .photo-frame:active { transform: scale(0.9); }
+#image-preview-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* 深色背景 */
+    display: none; /* 初始隐藏 */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* 确保在最顶层 */
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#image-preview-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+#preview-img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#image-preview-overlay.show #preview-img {
+    transform: scale(1);
+}
+
+/* 给爱心墙照片增加点击反馈 */
+.photo-frame {
+    cursor: zoom-in;
+    transition: transform 0.2s;
+}
+.photo-frame:active {
+    transform: scale(0.9);
+}
+
     </style>
 </head>
 <body>
@@ -231,7 +256,7 @@
         <p style="color: rgba(255,255,255,0.6); margin-top: 20px; font-size: 0.9rem;"></p>
     </div>
 
-    <div id="wish-modal">
+    <div id="wish-modal" onclick="this.style.display='none'">
         <div class="modal-body" id="modal-text"></div>
     </div>
 
@@ -239,7 +264,10 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <audio id="voice-player"></audio>
+    <audio id="bgm" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+<audio id="voice-player"></audio>
+
 
     <div id="main-content">
         <div class="sticker s1"><img src="sticker1.png"></div>
@@ -275,9 +303,12 @@
         <div id="image-preview-overlay" onclick="closePreview()">
             <img id="preview-img" src="" alt="预览图">
         </div>
+
+
     </div>
 
     <script>
+        // 初始化背景星星
         function initStars() {
             const cover = document.getElementById('cover-page');
             for (let i = 0; i < 40; i++) {
@@ -294,84 +325,116 @@
         }
         initStars();
 
-        const wishData = [
-            { text: "幸福与时间长青💗", audio: "voice2.m4a" },
-            { text: "祝大姨妈新的一岁：升职加薪不加班，早睡早起不脱发，钱包鼓鼓，生龙活虎！", audio: "voice3.m4a" },
-            { text: "25岁快乐！6年时光一晃而过，谢谢你陪我走过这么多日子，新的一岁继续一起吃吃喝喝，祝你好运连连，好事扎堆来，想买星星人就买星星人，以后的路都要顺畅一些", audio: "voice4.m4a" },
-            { text: "永永远远仅限你，永远的陪伴、永远的支持", audio: "voice5.m4a" },
-            { text: "亲爱滴泓儿，千言万语不及一句：恭喜发财！", audio: "voice6.m4a" }
-        ];
+        const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#764ba2", "#d4a5a5", "#e67e22"];
 
-        let activeIndices = [];
+        // 1. 配置祝福语和对应的音频文件（确保文件名正确）
+const wishData = [
+    { text: "幸福与时间长青💗", audio: "voice2.m4a" },
+    { text: "祝大姨妈新的一岁：升职加薪不加班，早睡早起不脱发，钱包鼓鼓，生龙活虎！", audio: "voice3.m4a" },
+    { text: "25岁快乐！6年时光一晃而过，谢谢你陪我走过这么多日子，新的一岁继续一起吃吃喝喝，祝你好运连连，好事扎堆来，想买星星人就买星星人，以后的路都要顺畅一些", audio: "voice4.m4a" },
+    { text: "永永远远仅限你，永远的陪伴、永远的支持", audio: "voice5.m4a" },
+    { text: "亲爱滴泓儿，千言万语不及一句：恭喜发财！", audio: "voice.m4a" }
 
-        function createWish() {
-            const mainContent = document.getElementById('main-content');
-            if (activeIndices.length >= 5) return;
+];
 
-            const availableIndices = wishData.map((_, i) => i).filter(i => !activeIndices.includes(i));
-            if (availableIndices.length === 0) return;
+let activeIndices = []; // 记录当前屏幕上正在飞的索引
 
-            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-            const data = wishData[randomIndex];
-            activeIndices.push(randomIndex);
+function createWish() {
+    const mainContent = document.getElementById('main-content');
+    if (activeIndices.length >= 5) return;
 
-            const wish = document.createElement('div');
-            wish.className = 'floating-wish';
-            wish.style.left = Math.random() * 70 + 10 + '%';
-            wish.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
-            wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
-            
-            wish.onclick = (e) => {
-                e.stopPropagation();
-                showDetail(data.text);
-                const voicePlayer = document.getElementById('voice-player');
-                const bgm = document.getElementById('bgm');
-                voicePlayer.src = data.audio;
-                bgm.volume = 0.2; 
-                voicePlayer.play();
-                voicePlayer.onended = () => { bgm.volume = 1.0; };
-            };
+    // 去重逻辑
+    const availableIndices = wishData.map((_, i) => i).filter(i => !activeIndices.includes(i));
+    if (availableIndices.length === 0) return;
 
-            mainContent.appendChild(wish);
+    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    const data = wishData[randomIndex];
+    activeIndices.push(randomIndex);
 
-            setTimeout(() => {
-                activeIndices = activeIndices.filter(i => i !== randomIndex);
-                wish.remove();
-            }, 12000); 
-        }
+    const wish = document.createElement('div');
+    wish.className = 'floating-wish';
+    wish.style.left = Math.random() * 70 + 10 + '%';
+    // 随机一个微小的旋转角，让飘动更自然
+    wish.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+    wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
+    
+    // 点击事件
+    wish.onclick = (e) => {
+        e.stopPropagation();
+        
+        // 1. 弹出文字
+        showDetail(data.text);
+        
+        // 2. 播放音频逻辑
+        const voicePlayer = document.getElementById('voice-player');
+        const bgm = document.getElementById('bgm');
+        
+        voicePlayer.src = data.audio;
+        
+        // 播放时降低 BGM 音量，突出人声
+        bgm.volume = 0.2; 
+        voicePlayer.play();
+        
+        // 音频结束时恢复 BGM 音量
+        voicePlayer.onended = () => { bgm.volume = 1.0; };
+    };
 
-        function showDetail(content) {
-            const modal = document.getElementById('wish-modal');
-            const modalText = document.getElementById('modal-text');
-            modalText.innerText = content;
-            modal.style.display = 'flex';
-            modal.onclick = () => {
-                modal.style.display = 'none';
-                document.getElementById('voice-player').pause();
-                document.getElementById('bgm').volume = 1.0;
-            };
-        }
+    mainContent.appendChild(wish);
 
-        function openPreview(src) {
-            const overlay = document.getElementById('image-preview-overlay');
-            const previewImg = document.getElementById('preview-img');
-            previewImg.src = src;
-            overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('show'); }, 10);
-        }
+    setTimeout(() => {
+        activeIndices = activeIndices.filter(i => i !== randomIndex);
+        wish.remove();
+    }, 15000); 
+}
 
-        function closePreview() {
-            const overlay = document.getElementById('image-preview-overlay');
-            overlay.classList.remove('show');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        }
+// 确保关闭弹窗时也停止音频（修改现有的显示函数或在 HTML onclick 里处理）
+function showDetail(content) {
+    const modal = document.getElementById('wish-modal');
+    const modalText = document.getElementById('modal-text');
+    modalText.innerText = content;
+    modal.style.display = 'flex';
+    
+    // 修改弹窗点击事件：关闭时也停掉声音
+    modal.onclick = () => {
+        modal.style.display = 'none';
+        document.getElementById('voice-player').pause();
+        document.getElementById('bgm').volume = 1.0;
+    };
+}
 
-        document.querySelectorAll('.photo-frame').forEach(frame => {
-            frame.addEventListener('click', function() {
-                const imgSrc = this.querySelector('img').src;
-                openPreview(imgSrc);
-            });
-        });
+
+        // 在原有脚本末尾添加
+
+// 预览功能函数
+function openPreview(src) {
+    const overlay = document.getElementById('image-preview-overlay');
+    const previewImg = document.getElementById('preview-img');
+    
+    previewImg.src = src;
+    overlay.style.display = 'flex';
+    // 稍微延迟一点点添加 class 以触发 transition 动画
+    setTimeout(() => {
+        overlay.classList.add('show');
+    }, 10);
+}
+
+function closePreview() {
+    const overlay = document.getElementById('image-preview-overlay');
+    overlay.classList.remove('show');
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
+}
+
+// 为所有照片绑定点击事件
+document.querySelectorAll('.photo-frame').forEach(frame => {
+    frame.addEventListener('click', function() {
+        const imgSrc = this.querySelector('img').src;
+        openPreview(imgSrc);
+    });
+});
+
+
 
         function handleCandleClick() {
             const flame = document.getElementById('flame');
@@ -389,7 +452,7 @@
             setTimeout(() => {
                 cover.style.display = 'none';
                 main.classList.add('content-reveal');
-                setInterval(createWish, 1500);
+                setInterval(createWish, 1200); // 降低产生频率，配合慢速移动
             }, 2100);
         }
 

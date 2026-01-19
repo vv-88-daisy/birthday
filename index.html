@@ -70,17 +70,65 @@
         @keyframes blink-action { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* 主页面 */
+                /* 主页面：模拟紫色绸缎质感 */
         #main-content {
             width: 100%; height: 100vh;
-            position: relative; background-color: #f7effa;
+            position: relative;
+            
+            /* 1. 基础底色采用封面底部的深紫色 */
+            background-color: #5a3d7c; 
+            
+            /* 2. 模拟绸缎折痕和光泽纹理：使用多个斜向线性渐变 */
+            background-image: 
+                /* 第一层：细腻的明暗纹理 */
+                linear-gradient(115deg, 
+                    transparent 20%, 
+                    rgba(255, 255, 255, 0.05) 35%, 
+                    rgba(0, 0, 0, 0.1) 45%, 
+                    transparent 50%),
+                /* 第二层：缎面主反光条 */
+                linear-gradient(115deg, 
+                    transparent 45%, 
+                    rgba(255, 255, 255, 0.12) 52%, 
+                    transparent 58%),
+                /* 第三层：柔和的深浅过渡 */
+                linear-gradient(180deg, 
+                    rgba(0, 0, 0, 0.2) 0%, 
+                    transparent 50%, 
+                    rgba(0, 0, 0, 0.2) 100%);
+            
+            background-size: 200% 100%; /* 扩大尺寸为动画做准备 */
+            
             visibility: hidden; opacity: 0;
             filter: blur(10px); transition: opacity 1.5s ease, filter 1.5s ease;
             z-index: 10; display: flex; flex-direction: column; align-items: center;
+            
+            /* 3. 赋予背景缓缓流动的生命力，像绸缎在抖动 */
+            animation: silkFlow 15s infinite alternate ease-in-out;
         }
+
+        /* 绸缎流动动画 */
+        @keyframes silkFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* 配合深色背景，调整标题为浅粉/亮色，像刺绣在绸缎上的效果 */
+        .birthday-title {
+            position: absolute; top: 6%; 
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 12vw, 4rem); 
+            color: #ffb929; /* 改为浅白色/粉色 */
+            white-space: nowrap;
+            text-shadow: 0 0 15px rgba(255,255,255,0.3), 2px 2px 5px rgba(0,0,0,0.5);
+            width: 90%; text-align: center;
+            z-index: 30;
+        }
+
 
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
-        .birthday-title {
+        /* .birthday-title {
             position: absolute; top: 6%; 
             font-family: 'Dancing Script', cursive;
             font-size: clamp(2rem, 12vw, 4rem); 
@@ -89,7 +137,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             width: 90%; text-align: center;
             z-index: 30;
-        }
+        } */
 
         /* --- 漂浮祝福语样式 --- */
         /* 修改后的音符/图案祝福语样式 */
@@ -333,6 +381,7 @@ const wishData = [
     { text: "祝大姨妈新的一岁：升职加薪不加班，早睡早起不脱发，钱包鼓鼓，生龙活虎！", audio: "voice3.m4a" },
     { text: "25岁快乐！6年时光一晃而过，谢谢你陪我走过这么多日子，新的一岁继续一起吃吃喝喝，祝你好运连连，好事扎堆来，想买星星人就买星星人，以后的路都要顺畅一些", audio: "voice4.m4a" },
     { text: "永永远远仅限你，永远的陪伴、永远的支持", audio: "voice5.m4a" },
+    { text: "亲爱滴泓儿，千言万语不及一句：恭喜发财！", audio: "voice6.m4a" }
 
 ];
 

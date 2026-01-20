@@ -13,7 +13,7 @@
             overflow: hidden; background-color: #f7effa;
         }
 
-        /* 封面层 */
+        /* 封面层保持不变 */
         #cover-page {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #2c1a3d 0%, #5a3d7c 100%);
@@ -54,86 +54,76 @@
         .flame-blink { animation: blink-action 0.2s ease-in-out 3; opacity: 1 !important; transform: translateX(-50%) scale(1.3) !important; }
         @keyframes blink-action { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+        /* --- 主屏容器：移除复杂的Flex，使用简单可靠的相对定位 --- */
         #main-content {
-            width: 100%; height: 100vh; position: relative; background-color: #ded3e2;
+            width: 100%; height: 100%; position: relative; background-color: #ded3e2;
             visibility: hidden; opacity: 0; filter: blur(10px);
             transition: opacity 1.5s ease, filter 1.5s ease;
             z-index: 10;
-            /* 关键点：使用 Flexbox 实现绝对居中 */
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
         }
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
         .birthday-title {
-            position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+            position: absolute; top: 5%; left: 0; width: 100%;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2rem, 8vw, 3.5rem); 
-            color: #764ba2; white-space: nowrap;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            text-align: center; z-index: 30;
+            font-size: clamp(1.8rem, 8vw, 3rem); 
+            color: #764ba2; text-align: center; z-index: 30;
         }
 
-        /* --- 修正后的爱心墙容器 --- */
+        /* --- 最终版爱心墙：适配手机，绝对垂直水平居中 --- */
         .heart-wrapper {
-            position: relative; 
-            width: 450px;  
-            height: 500px;
-            /* 这里的 scale 负责适配屏幕，但 transform-origin 确保缩放不偏离中心 */
-            transform: scale(clamp(0.4, 85vw / 450, 0.9));
-            transform-origin: center center;
+            position: absolute;
+            /* 居中核心公式 */
+            top: 52%; 
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            
+            /* 适配手机：如果手机窄，宽度随手机；如果电脑宽，宽度封顶 */
+            width: min(360px, 92vw); 
+            height: min(400px, 80vh);
             z-index: 20;
-            margin-top: 20px; /* 给顶部标题留一点点空间 */
         }
 
         .photo-frame {
             position: absolute; 
-            width: 90px;
-            height: 90px; 
-            border: 4px solid white; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            /* 照片大小随容器自动缩放 */
+            width: 22%; 
+            padding-bottom: 22%; /* 保持正方形 */
+            height: 0;
+            border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             background: #fff; 
             overflow: hidden;
             animation: heartSurge 8s infinite ease-in-out;
-            cursor: zoom-in; 
-            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: zoom-in;
+        }
+        .photo-frame img {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; object-fit: cover;
         }
 
-        .photo-frame:nth-child(odd) { transform: rotate(-3deg); }
-        .photo-frame:nth-child(even) { transform: rotate(3deg); }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .photo-frame:hover { 
-            transform: scale(1.2) rotate(0deg) !important; 
-            z-index: 100; 
-            animation-play-state: paused; 
-            opacity: 1 !important;
-        }
+        /* 重新计算的对称坐标（基于百分比，完美适配所有屏幕） */
+        .p1  { left: 39%; top: 22%; z-index: 25; } /* 眉心 */
+        .p10 { left: 21%; top: 12%; } 
+        .p11 { left: 57%; top: 12%; } 
+        .p2  { left: 3%;  top: 5%;  } 
+        .p3  { left: 75%; top: 5%;  } 
+        .p4  { left: -5%; top: 22%; } 
+        .p12 { left: -8%; top: 40%; } 
+        .p6  { left: 0%;  top: 58%; } 
+        .p5  { left: 83%; top: 22%; } 
+        .p13 { left: 86%; top: 40%; } 
+        .p7  { left: 78%; top: 58%; } 
+        .p17 { left: 12%; top: 72%; } 
+        .p18 { left: 66%; top: 72%; } 
+        .p8  { left: 25%; top: 82%; } 
+        .p9  { left: 53%; top: 82%; } 
+        .p14 { left: 39%; top: 92%; z-index: 25; } /* 底尖 */
 
         @keyframes heartSurge {
-            0%, 100% { transform: translate(0, 0) scale(1) rotate(inherit); opacity: 1; }
-            30% { transform: translate(2px, -3px) scale(1.02); opacity: 0.6; }
-            60% { transform: translate(-1px, 2px) scale(0.98); opacity: 0.9; }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
-
-        /* 基于 450px 容器宽度的精准对称坐标 */
-        .p1  { left: 180px; top: 110px; z-index: 25; } 
-        .p10 { left: 105px; top: 60px;  } 
-        .p11 { left: 255px; top: 60px;  } 
-        .p2  { left: 30px;  top: 30px;  } 
-        .p3  { left: 330px; top: 30px;  } 
-        .p4  { left: -10px; top: 110px; } 
-        .p12 { left: -30px; top: 200px; } 
-        .p6  { left: 0px;   top: 290px; } 
-        .p5  { left: 370px; top: 110px; } 
-        .p13 { left: 390px; top: 200px; } 
-        .p7  { left: 360px; top: 290px; } 
-        .p17 { left: 50px;  top: 360px; } 
-        .p18 { left: 310px; top: 360px; } 
-        .p8  { left: 110px; top: 410px; } 
-        .p9  { left: 250px; top: 410px; } 
-        .p14 { left: 180px; top: 460px; z-index: 25; }
 
         /* 动画延迟错开 */
         .p1 { animation-delay: -0.5s; } .p2 { animation-delay: -1.2s; }
@@ -146,23 +136,32 @@
         .p17 { animation-delay: -5.1s; } .p18 { animation-delay: -0.2s; }
 
         .sticker { position: absolute; z-index: 20; pointer-events: none; }
-        .sticker img { width: 60px; height: 60px; }
+        .sticker img { width: 50px; height: 50px; }
         .s1 { top: 2%; left: 2%; } .s2 { top: 2%; right: 2%; } 
         .s3 { bottom: 12%; left: 2%; } .s4 { bottom: 12%; right: 2%; }
 
-        .footer-text { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); font-weight: bold; color: #764ba2; text-align: center; width: 100%; z-index: 30; }
+        .footer-text { position: absolute; bottom: 5%; left: 0; width: 100%; font-weight: bold; color: #764ba2; text-align: center; z-index: 30; }
 
+        /* 预览层 */
         #image-preview-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); display: none; justify-content: center;
-            align-items: center; z-index: 3000; cursor: zoom-out; opacity: 0;
-            transition: opacity 0.3s ease;
+            align-items: center; z-index: 3000;
         }
-        #image-preview-overlay.show { display: flex; opacity: 1; }
-        #preview-img { max-width: 90%; max-height: 80%; border-radius: 10px; transform: scale(0.8); transition: transform 0.3s; }
-        #image-preview-overlay.show #preview-img { transform: scale(1); }
+        #preview-img { max-width: 90%; max-height: 80%; border-radius: 10px; }
         
-        .floating-wish { z-index: 40; }
+        #wish-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
+        }
+        .modal-body {
+            background: white; padding: 25px; border-radius: 15px;
+            width: 80%; color: #555; text-align: center;
+        }
+        .floating-wish { position: absolute; width: 35px; height: 50px; cursor: pointer; animation: floatUp 12s linear infinite; }
+        .floating-wish::before { content: ''; position: absolute; width: 100%; height: 100%; background: url('note.png') no-repeat center/contain; }
+        @keyframes floatUp { 0% { transform: translateY(110vh); } 100% { transform: translateY(-20vh); } }
     </style>
 </head>
 <body>
@@ -192,40 +191,40 @@
         <h1 class="birthday-title">Happy Birthday</h1>
         
         <div class="heart-wrapper">
-            <div class="photo-frame p1"><img src="p1.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p2"><img src="p2.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p3"><img src="p3.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p4"><img src="p4.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p5"><img src="p5.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p6"><img src="p6.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p7"><img src="p7.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p8"><img src="p8.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p9"><img src="p9.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p10"><img src="p10.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p11"><img src="p11.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p12"><img src="p12.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p13"><img src="p13.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p14"><img src="p14.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p17"><img src="p17.jpg" onerror="tryUpper(this)"></div>
-            <div class="photo-frame p18"><img src="p18.jpg" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p1"><img src="p1.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p2"><img src="p2.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p3"><img src="p3.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p4"><img src="p4.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p5"><img src="p5.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p6"><img src="p6.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p7"><img src="p7.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p8"><img src="p8.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p9"><img src="p9.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p10"><img src="p10.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p11"><img src="p11.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p12"><img src="p12.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p13"><img src="p13.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p14"><img src="p14.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p17"><img src="p17.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
+            <div class="photo-frame p18"><img src="p18.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
         </div>
         
         <div class="footer-text">生日快乐🎂</div>
         
-        <div id="image-preview-overlay" onclick="closePreview()">
+        <div id="image-preview-overlay" onclick="this.style.display='none'">
             <img id="preview-img" src="">
         </div>
     </div>
 
     <script>
+        // 初始化背景星星
         function initStars() {
             const cover = document.getElementById('cover-page');
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 30; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 const size = Math.random() * 3 + 2 + 'px';
-                star.style.width = size;
-                star.style.height = size;
+                star.style.width = size; star.style.height = size;
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.animationDelay = Math.random() * 3 + 's';
@@ -251,69 +250,43 @@
             const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
             const data = wishData[randomIndex];
             activeIndices.push(randomIndex);
+
             const wish = document.createElement('div');
             wish.className = 'floating-wish';
-            wish.style.left = Math.random() * 70 + 10 + '%';
-            wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
+            wish.style.left = Math.random() * 80 + 10 + '%';
             wish.onclick = (e) => {
                 e.stopPropagation();
-                showDetail(data.text);
+                document.getElementById('modal-text').innerText = data.text;
+                document.getElementById('wish-modal').style.display = 'flex';
                 const vp = document.getElementById('voice-player');
-                const bgm = document.getElementById('bgm');
                 vp.src = data.audio;
-                vp.volume = 1.0; 
-                bgm.volume = 0.05; 
+                document.getElementById('bgm').volume = 0.1;
                 vp.play();
-                vp.onended = () => { bgm.volume = 1.0; };
+                vp.onended = () => { document.getElementById('bgm').volume = 1.0; };
             };
             mainContent.appendChild(wish);
             setTimeout(() => {
                 activeIndices = activeIndices.filter(i => i !== randomIndex);
                 wish.remove();
-            }, 15000); 
-        }
-
-        function showDetail(content) {
-            const modal = document.getElementById('wish-modal');
-            const modalText = document.getElementById('modal-text');
-            modalText.innerText = content;
-            modal.style.display = 'flex';
+            }, 14000);
         }
 
         function openPreview(src) {
             const overlay = document.getElementById('image-preview-overlay');
-            const previewImg = document.getElementById('preview-img');
-            previewImg.src = src;
+            document.getElementById('preview-img').src = src;
             overlay.style.display = 'flex';
-            setTimeout(() => overlay.classList.add('show'), 10);
         }
-
-        function closePreview() {
-            const overlay = document.getElementById('image-preview-overlay');
-            overlay.classList.remove('show');
-            setTimeout(() => overlay.style.display = 'none', 300);
-        }
-
-        document.querySelectorAll('.photo-frame').forEach(frame => {
-            frame.addEventListener('click', function() {
-                openPreview(this.querySelector('img').src);
-            });
-        });
 
         function handleCandleClick() {
-            const flame = document.getElementById('flame');
-            const halo = document.getElementById('halo-effect');
-            const cover = document.getElementById('cover-page');
-            const main = document.getElementById('main-content');
-            flame.classList.add('flame-blink');
+            document.getElementById('flame').classList.add('flame-blink');
             setTimeout(() => {
-                halo.classList.add('halo-run');
+                document.getElementById('halo-effect').classList.add('halo-run');
                 document.getElementById('bgm').play().catch(() => {});
             }, 600);
             setTimeout(() => {
-                cover.style.display = 'none';
-                main.classList.add('content-reveal');
-                setInterval(createWish, 1200);
+                document.getElementById('cover-page').style.display = 'none';
+                document.getElementById('main-content').classList.add('content-reveal');
+                setInterval(createWish, 2000);
             }, 2100);
         }
 

@@ -13,7 +13,7 @@
             overflow: hidden; background-color: #f7effa;
         }
 
-        /* 封面层保持不变 */
+        /* 封面层 */
         #cover-page {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #2c1a3d 0%, #5a3d7c 100%);
@@ -52,9 +52,7 @@
             box-shadow: 0 -8px 25px #ff5e00, 0 0 20px #ffda44; opacity: 0; transform-origin: bottom center;
         }
         .flame-blink { animation: blink-action 0.2s ease-in-out 3; opacity: 1 !important; transform: translateX(-50%) scale(1.3) !important; }
-        @keyframes blink-action { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* --- 主屏容器：移除复杂的Flex，使用简单可靠的相对定位 --- */
         #main-content {
             width: 100%; height: 100%; position: relative; background-color: #ded3e2;
             visibility: hidden; opacity: 0; filter: blur(10px);
@@ -63,32 +61,35 @@
         }
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
+        /* --- 标题：调大一点，往下一点 --- */
         .birthday-title {
-            position: absolute; top: 5%; left: 0; width: 100%;
+            position: absolute; 
+            top: 10%; /* 往下移了一点 */
+            left: 0; 
+            width: 100%;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(1.8rem, 8vw, 3rem); 
-            color: #764ba2; text-align: center; z-index: 30;
+            font-size: clamp(2.2rem, 10vw, 4rem); /* 字体调大了 */
+            color: #764ba2; 
+            text-align: center; 
+            z-index: 30;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* --- 最终版爱心墙：适配手机，绝对垂直水平居中 --- */
+        /* --- 爱心墙：缩小一点 --- */
         .heart-wrapper {
             position: absolute;
-            /* 居中核心公式 */
-            top: 52%; 
+            top: 55%; /* 稍微下移，配合标题 */
             left: 50%;
             transform: translate(-50%, -50%); 
-            
-            /* 适配手机：如果手机窄，宽度随手机；如果电脑宽，宽度封顶 */
-            width: min(360px, 92vw); 
-            height: min(400px, 80vh);
+            width: min(320px, 85vw); /* 宽度缩小了 */
+            height: min(360px, 70vh); /* 高度缩小了 */
             z-index: 20;
         }
 
         .photo-frame {
             position: absolute; 
-            /* 照片大小随容器自动缩放 */
             width: 22%; 
-            padding-bottom: 22%; /* 保持正方形 */
+            padding-bottom: 22%; 
             height: 0;
             border: 3px solid white; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -102,8 +103,8 @@
             width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* 重新计算的对称坐标（基于百分比，完美适配所有屏幕） */
-        .p1  { left: 39%; top: 22%; z-index: 25; } /* 眉心 */
+        /* 坐标保持对称比例 */
+        .p1  { left: 39%; top: 22%; z-index: 25; } 
         .p10 { left: 21%; top: 12%; } 
         .p11 { left: 57%; top: 12%; } 
         .p2  { left: 3%;  top: 5%;  } 
@@ -118,14 +119,14 @@
         .p18 { left: 66%; top: 72%; } 
         .p8  { left: 25%; top: 82%; } 
         .p9  { left: 53%; top: 82%; } 
-        .p14 { left: 39%; top: 92%; z-index: 25; } /* 底尖 */
+        .p14 { left: 39%; top: 92%; z-index: 25; }
 
         @keyframes heartSurge {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.8; }
         }
 
-        /* 动画延迟错开 */
+        /* 动画延迟 */
         .p1 { animation-delay: -0.5s; } .p2 { animation-delay: -1.2s; }
         .p3 { animation-delay: -2.8s; } .p4 { animation-delay: -4.1s; }
         .p5 { animation-delay: -0.9s; } .p6 { animation-delay: -5.5s; }
@@ -142,7 +143,6 @@
 
         .footer-text { position: absolute; bottom: 5%; left: 0; width: 100%; font-weight: bold; color: #764ba2; text-align: center; z-index: 30; }
 
-        /* 预览层 */
         #image-preview-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); display: none; justify-content: center;
@@ -217,7 +217,6 @@
     </div>
 
     <script>
-        // 初始化背景星星
         function initStars() {
             const cover = document.getElementById('cover-page');
             for (let i = 0; i < 30; i++) {

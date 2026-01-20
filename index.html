@@ -102,21 +102,23 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center;
         }
 
-        /* --- 修正后的居中照片墙 --- */
+        /* --- 核心优化：完美居中的照片墙 --- */
         
         .heart-wrapper {
             position: absolute; 
+            /* 定位到屏幕物理中心 */
             top: 50%; 
             left: 50%;
-            /* 使用 translateX 确保物理中点对齐，scale 自动适配手机 */
-            transform: translate(-50%, -50%) scale(clamp(0.5, 80vw / 400, 0.85));
-            width: 400px;  /* 统一容器宽度基准 */
+            /* translate 确保是以容器中心为基点对齐，scale 自动适配手机屏幕宽度 */
+            transform: translate(-50%, -50%) scale(clamp(0.45, 85vw / 400, 0.85));
+            width: 400px;  /* 统一坐标基准宽度 */
             height: 480px; 
+            z-index: 20;
         }
 
         .photo-frame {
             position: absolute; 
-            width: 85px;  /* 稍微缩小尺寸以适配手机窄屏 */
+            width: 85px;  
             height: 85px; 
             border: 4px solid white; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -164,7 +166,7 @@
             60% { transform: translate(-1px, 2px) scale(0.98); opacity: 0.9; }
         }
 
-        /* 重新修正的坐标：以 400px 为宽度的对称坐标 */
+        /* 经过数学计算的对称爱心坐标 */
         .p1  { left: 157px; top: 100px; z-index: 20; } /* 眉心 */
         .p10 { left: 85px;  top: 55px;  } 
         .p11 { left: 230px; top: 55px;  } 
@@ -185,7 +187,7 @@
         .p8  { left: 100px; top: 430px; } 
         .p9  { left: 215px; top: 430px; } 
         
-        .p14 { left: 157px; top: 490px; z-index: 15; } /* 最底尖 */
+        .p14 { left: 157px; top: 490px; z-index: 15; } /* 底尖 */
 
         .sticker { position: absolute; z-index: 20; pointer-events: none; }
         .sticker img { width: 70px; height: 70px; }

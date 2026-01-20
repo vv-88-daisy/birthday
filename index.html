@@ -61,49 +61,51 @@
         }
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
-        /* --- 标题：调大一点，往下一点 --- */
         .birthday-title {
-            position: absolute; 
-            top: 10%; /* 往下移了一点 */
-            left: 0; 
-            width: 100%;
+            position: absolute; top: 10%; left: 0; width: 100%;
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2.2rem, 10vw, 4rem); /* 字体调大了 */
-            color: #764ba2; 
-            text-align: center; 
-            z-index: 30;
+            font-size: clamp(2.2rem, 10vw, 4rem);
+            color: #764ba2; text-align: center; z-index: 30;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* --- 爱心墙：缩小一点 --- */
         .heart-wrapper {
-            position: absolute;
-            top: 55%; /* 稍微下移，配合标题 */
-            left: 50%;
+            position: absolute; top: 55%; left: 50%;
             transform: translate(-50%, -50%); 
-            width: min(320px, 85vw); /* 宽度缩小了 */
-            height: min(360px, 70vh); /* 高度缩小了 */
+            width: min(320px, 85vw); height: min(360px, 70vh);
             z-index: 20;
         }
 
         .photo-frame {
             position: absolute; 
-            width: 22%; 
-            padding-bottom: 22%; 
-            height: 0;
-            border: 3px solid white; 
+            width: 22%; padding-bottom: 22%; height: 0;
+            background: #fff; border: 3px solid white; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background: #fff; 
-            overflow: hidden;
-            animation: heartSurge 8s infinite ease-in-out;
-            cursor: zoom-in;
+            overflow: hidden; cursor: zoom-in;
+            /* 基础设置 */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: heartSurge 5s infinite ease-in-out;
         }
+
+        /* 奇偶数初始角度 */
+        .photo-frame:nth-child(odd) { --rot: -5deg; }
+        .photo-frame:nth-child(even) { --rot: 5deg; }
+
+        /* 悬停效果：取消旋转、取消变淡、放大 */
+        .photo-frame:hover {
+            transform: scale(1.3) rotate(0deg) !important;
+            opacity: 1 !important;
+            z-index: 100 !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            animation-play-state: paused;
+        }
+
         .photo-frame img {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* 坐标保持对称比例 */
+        /* 坐标位置保持 */
         .p1  { left: 39%; top: 22%; z-index: 25; } 
         .p10 { left: 21%; top: 12%; } 
         .p11 { left: 57%; top: 12%; } 
@@ -121,20 +123,24 @@
         .p9  { left: 53%; top: 82%; } 
         .p14 { left: 39%; top: 92%; z-index: 25; }
 
+        /* --- 核心修复：加入透明度(opacity)变化 --- */
         @keyframes heartSurge {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
+            0%, 100% { 
+                transform: rotate(var(--rot)) scale(1); 
+                opacity: 1; /* 完全显示 */
+            }
+            50% { 
+                transform: rotate(var(--rot)) scale(1.08) translateY(-5px); 
+                opacity: 0.7; /* 变淡效果 */
+            }
         }
 
-        /* 动画延迟 */
-        .p1 { animation-delay: -0.5s; } .p2 { animation-delay: -1.2s; }
-        .p3 { animation-delay: -2.8s; } .p4 { animation-delay: -4.1s; }
-        .p5 { animation-delay: -0.9s; } .p6 { animation-delay: -5.5s; }
-        .p7 { animation-delay: -3.2s; } .p8 { animation-delay: -6.7s; }
-        .p9 { animation-delay: -1.4s; } .p10 { animation-delay: -7.3s; }
-        .p11 { animation-delay: -2.1s; } .p12 { animation-delay: -4.8s; }
-        .p13 { animation-delay: -6.0s; } .p14 { animation-delay: -3.6s; }
-        .p17 { animation-delay: -5.1s; } .p18 { animation-delay: -0.2s; }
+        /* 随机化延迟，让“变淡”和“跳动”错开，更有节奏感 */
+        .p1 { animation-delay: 0s; } .p2 { animation-delay: -0.8s; }
+        .p3 { animation-delay: -1.6s; } .p4 { animation-delay: -2.4s; }
+        .p5 { animation-delay: -0.4s; } .p6 { animation-delay: -1.2s; }
+        .p7 { animation-delay: -2.0s; } .p8 { animation-delay: -2.8s; }
+        .p9 { animation-delay: -3.6s; } .p10 { animation-delay: -4.4s; }
 
         .sticker { position: absolute; z-index: 20; pointer-events: none; }
         .sticker img { width: 50px; height: 50px; }
@@ -165,31 +171,24 @@
     </style>
 </head>
 <body>
-
     <div id="halo-effect"></div>
-
     <div id="cover-page">
         <div class="cake-container" onclick="handleCandleClick()">
             <div class="candle-flame" id="flame"></div>
             <img src="cake.png" class="cake-img">
         </div>
     </div>
-
     <div id="wish-modal" onclick="this.style.display='none'">
         <div class="modal-body" id="modal-text"></div>
     </div>
-
     <audio id="bgm" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="voice-player"></audio>
-
     <div id="main-content">
         <div class="sticker s1"><img src="sticker1.png"></div>
         <div class="sticker s2"><img src="sticker2.png"></div>
         <div class="sticker s3"><img src="sticker3.png"></div>
         <div class="sticker s4"><img src="sticker4.png"></div>
-        
         <h1 class="birthday-title">Happy Birthday</h1>
-        
         <div class="heart-wrapper">
             <div class="photo-frame p1"><img src="p1.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
             <div class="photo-frame p2"><img src="p2.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
@@ -208,15 +207,13 @@
             <div class="photo-frame p17"><img src="p17.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
             <div class="photo-frame p18"><img src="p18.jpg" onclick="openPreview(this.src)" onerror="tryUpper(this)"></div>
         </div>
-        
         <div class="footer-text">生日快乐🎂</div>
-        
         <div id="image-preview-overlay" onclick="this.style.display='none'">
             <img id="preview-img" src="">
         </div>
     </div>
-
     <script>
+        // 脚本部分保持不变
         function initStars() {
             const cover = document.getElementById('cover-page');
             for (let i = 0; i < 30; i++) {
@@ -231,7 +228,6 @@
             }
         }
         initStars();
-
         const wishData = [
             { text: "幸福与时间长青💗", audio: "voice2.m4a" },
             { text: "祝大姨妈新的一岁：升职加薪不加班，早睡早起不脱发，钱包鼓鼓，生龙活虎！", audio: "voice3.m4a" },
@@ -239,7 +235,6 @@
             { text: "永永远远仅限你，永远的陪伴、永远的支持", audio: "voice5.m4a" },
             { text: "亲爱滴泓儿，千言万语不及一句：恭喜发财！", audio: "voice6.m4a" }
         ];
-
         let activeIndices = [];
         function createWish() {
             const mainContent = document.getElementById('main-content');
@@ -249,7 +244,6 @@
             const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
             const data = wishData[randomIndex];
             activeIndices.push(randomIndex);
-
             const wish = document.createElement('div');
             wish.className = 'floating-wish';
             wish.style.left = Math.random() * 80 + 10 + '%';
@@ -269,13 +263,11 @@
                 wish.remove();
             }, 14000);
         }
-
         function openPreview(src) {
             const overlay = document.getElementById('image-preview-overlay');
             document.getElementById('preview-img').src = src;
             overlay.style.display = 'flex';
         }
-
         function handleCandleClick() {
             document.getElementById('flame').classList.add('flame-blink');
             setTimeout(() => {
@@ -288,7 +280,6 @@
                 setInterval(createWish, 2000);
             }, 2100);
         }
-
         function tryUpper(img) {
             const src = img.getAttribute('src');
             if (src.endsWith('.jpg')) img.src = src.replace('.jpg', '.JPG');

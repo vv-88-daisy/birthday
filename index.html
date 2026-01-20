@@ -102,33 +102,33 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center;
         }
 
-        /* --- 优化后的爱心照片墙：呼吸感与异步变淡效果 --- */
+        /* --- 修正后的居中照片墙 --- */
         
         .heart-wrapper {
             position: absolute; 
             top: 50%; 
             left: 50%;
-            transform: translate(-50%, -45%) scale(0.85);
-            width: 550px;  
-            height: 450px; 
+            /* 使用 translateX 确保物理中点对齐，scale 自动适配手机 */
+            transform: translate(-50%, -50%) scale(clamp(0.5, 80vw / 400, 0.85));
+            width: 400px;  /* 统一容器宽度基准 */
+            height: 480px; 
         }
 
         .photo-frame {
             position: absolute; 
-            width: 90px;
-            height: 90px; 
+            width: 85px;  /* 稍微缩小尺寸以适配手机窄屏 */
+            height: 85px; 
             border: 4px solid white; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             background: #fff; 
             overflow: hidden;
-            /* 使用较长的动画周期，让动作更柔和 */
             animation: heartSurge 8s infinite ease-in-out;
             cursor: zoom-in; 
             transition: transform 0.3s, box-shadow 0.3s;
             z-index: 10;
         }
 
-        /* 通过负向延迟，让所有照片初始位置和变淡时机完全随机错开 */
+        /* 异步动画延迟 */
         .p1 { animation-delay: -0.5s; }
         .p2 { animation-delay: -1.2s; }
         .p3 { animation-delay: -2.8s; }
@@ -148,51 +148,44 @@
 
         .photo-frame:nth-child(odd) { transform: rotate(-3deg); }
         .photo-frame:nth-child(even) { transform: rotate(3deg); }
-        
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
         
         .photo-frame:hover { 
             transform: scale(1.15) rotate(0deg) !important; 
-            z-index: 50; 
+            z-index: 100; 
             animation-play-state: paused; 
             opacity: 1 !important;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* 呼吸涌动动画：包含位移、微缩放和局部变淡 */
         @keyframes heartSurge {
-            0%, 100% { 
-                transform: translate(0, 0) scale(1) rotate(inherit);
-                opacity: 1;
-            }
-            30% {
-                transform: translate(2px, -3px) scale(1.02);
-                /* 变淡发生在这个阶段，让整体只有少数几张同时变淡 */
-                opacity: 0.5;
-            }
-            60% {
-                transform: translate(-1px, 2px) scale(0.98);
-                opacity: 0.9;
-            }
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(inherit); opacity: 1; }
+            30% { transform: translate(2px, -3px) scale(1.02); opacity: 0.5; }
+            60% { transform: translate(-1px, 2px) scale(0.98); opacity: 0.9; }
         }
 
-        /* 坐标位置保持不变 */
-        .p1  { left: 180px; top: 100px;  z-index: 20; } 
-        .p10 { left: 110px; top: 55px;  z-index: 10; } 
-        .p11 { left: 250px; top: 55px;  z-index: 10; } 
-        .p2  { left: 45px;  top: 25px;  } 
-        .p3  { left: 315px; top: 25px;  } 
-        .p4  { left: -10px;  top: 90px;  } 
-        .p12 { left: -35px; top: 175px; } 
-        .p6  { left: -10px; top: 260px; } 
-        .p5  { left: 370px; top: 90px;  } 
-        .p13 { left: 395px; top: 175px; } 
-        .p7  { left: 370px; top: 260px; } 
-        .p17 { left: 45px;  top: 335px; } 
-        .p18 { left: 315px; top: 335px; } 
-        .p8  { left: 100px; top: 400px; } 
-        .p9  { left: 260px; top: 400px; } 
-        .p14 { left: 180px; top: 460px; z-index: 15; }
+        /* 重新修正的坐标：以 400px 为宽度的对称坐标 */
+        .p1  { left: 157px; top: 100px; z-index: 20; } /* 眉心 */
+        .p10 { left: 85px;  top: 55px;  } 
+        .p11 { left: 230px; top: 55px;  } 
+        .p2  { left: 15px;  top: 35px;  } /* 左峰 */
+        .p3  { left: 300px; top: 35px;  } /* 右峰 */
+        
+        .p4  { left: -25px; top: 110px; } 
+        .p12 { left: -40px; top: 200px; } 
+        .p6  { left: -15px; top: 290px; } 
+
+        .p5  { left: 340px; top: 110px; } 
+        .p13 { left: 355px; top: 200px; } 
+        .p7  { left: 330px; top: 290px; } 
+
+        .p17 { left: 40px;  top: 365px; } 
+        .p18 { left: 275px; top: 365px; } 
+        
+        .p8  { left: 100px; top: 430px; } 
+        .p9  { left: 215px; top: 430px; } 
+        
+        .p14 { left: 157px; top: 490px; z-index: 15; } /* 最底尖 */
 
         .sticker { position: absolute; z-index: 20; pointer-events: none; }
         .sticker img { width: 70px; height: 70px; }
@@ -311,16 +304,11 @@
                 showDetail(data.text);
                 const vp = document.getElementById('voice-player');
                 const bgm = document.getElementById('bgm');
-                
-                // --- 修改音量逻辑 ---
                 vp.src = data.audio;
-                vp.volume = 1.0; // 强制语音设为最大音量
-                bgm.volume = 0.05; // 背景音乐压低到极小，反衬语音
-                
+                vp.volume = 1.0; 
+                bgm.volume = 0.05; 
                 vp.play();
-                vp.onended = () => { 
-                    bgm.volume = 1.0; // 语音结束，BGM恢复
-                };
+                vp.onended = () => { bgm.volume = 1.0; };
             };
             mainContent.appendChild(wish);
             setTimeout(() => {

@@ -21,7 +21,6 @@
             z-index: 100;
         }
 
-        /* 星星样式 */
         .star {
             position: absolute; background: white; border-radius: 50%;
             opacity: 0; animation: starFlash 3s infinite ease-in-out; pointer-events: none;
@@ -32,7 +31,7 @@
         }
 
         #halo-effect {
-            position: fixed; top: 44%; left: 50%; width: 10vmax; height: 10vmax;
+            position: fixed; top: 50%; left: 50%; width: 10vmax; height: 10vmax;
             transform: translate(-50%, -50%) scale(0);
             background: radial-gradient(circle, rgba(255, 250, 200, 1) 0%, rgba(255, 240, 150, 0.8) 30%, rgba(255, 220, 100, 0) 70%);
             border-radius: 50%; z-index: 1000; pointer-events: none; opacity: 0;
@@ -41,8 +40,8 @@
         @keyframes haloAnimate {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
             20% { opacity: 1; }
-            70% { transform: translate(-50%, -50%) scale(22); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(28); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(25); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(35); opacity: 0; }
         }
 
         .cake-container { position: relative; cursor: pointer; z-index: 101; }
@@ -59,67 +58,39 @@
             width: 100%; height: 100vh; position: relative; background-color: #ded3e2;
             visibility: hidden; opacity: 0; filter: blur(10px);
             transition: opacity 1.5s ease, filter 1.5s ease;
-            z-index: 10; display: flex; flex-direction: column; align-items: center;
+            z-index: 10;
+            /* 关键点：使用 Flexbox 实现绝对居中 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
         }
         .content-reveal { visibility: visible !important; opacity: 1 !important; filter: blur(0px) !important; }
 
         .birthday-title {
-            position: absolute; top: 10%; 
+            position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2rem, 12vw, 4rem); 
+            font-size: clamp(2rem, 8vw, 3.5rem); 
             color: #764ba2; white-space: nowrap;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            width: 90%; text-align: center; z-index: 30;
+            text-align: center; z-index: 30;
         }
 
-        .floating-wish {
-            position: absolute; width: 40px; height: 60px;
-            cursor: pointer; z-index: 40; background: none;
-            display: flex; justify-content: center; align-items: center;
-            animation: floatUp 12s linear infinite; pointer-events: auto;
-        }
-        .floating-wish::before {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            background: url('note.png') no-repeat center/contain;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(105vh); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-150px); opacity: 0; }
-        }
-
-        #wish-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: none;
-            justify-content: center; align-items: center; z-index: 2000; padding: 20px;
-        }
-        .modal-body {
-            background: white; padding: 30px; border-radius: 20px;
-            max-width: 85%; color: #555; line-height: 1.6;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center;
-        }
-
-        /* --- 核心优化：完美居中的照片墙 --- */
-        
+        /* --- 修正后的爱心墙容器 --- */
         .heart-wrapper {
-            position: absolute; 
-            /* 定位到屏幕物理中心 */
-            top: 50%; 
-            left: 50%;
-            /* translate 确保是以容器中心为基点对齐，scale 自动适配手机屏幕宽度 */
-            transform: translate(-50%, -50%) scale(clamp(0.45, 85vw / 400, 0.85));
-            width: 400px;  /* 统一坐标基准宽度 */
-            height: 480px; 
+            position: relative; 
+            width: 450px;  
+            height: 500px;
+            /* 这里的 scale 负责适配屏幕，但 transform-origin 确保缩放不偏离中心 */
+            transform: scale(clamp(0.4, 85vw / 450, 0.9));
+            transform-origin: center center;
             z-index: 20;
+            margin-top: 20px; /* 给顶部标题留一点点空间 */
         }
 
         .photo-frame {
             position: absolute; 
-            width: 85px;  
-            height: 85px; 
+            width: 90px;
+            height: 90px; 
             border: 4px solid white; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             background: #fff; 
@@ -127,70 +98,55 @@
             animation: heartSurge 8s infinite ease-in-out;
             cursor: zoom-in; 
             transition: transform 0.3s, box-shadow 0.3s;
-            z-index: 10;
         }
-
-        /* 异步动画延迟 */
-        .p1 { animation-delay: -0.5s; }
-        .p2 { animation-delay: -1.2s; }
-        .p3 { animation-delay: -2.8s; }
-        .p4 { animation-delay: -4.1s; }
-        .p5 { animation-delay: -0.9s; }
-        .p6 { animation-delay: -5.5s; }
-        .p7 { animation-delay: -3.2s; }
-        .p8 { animation-delay: -6.7s; }
-        .p9 { animation-delay: -1.4s; }
-        .p10 { animation-delay: -7.3s; }
-        .p11 { animation-delay: -2.1s; }
-        .p12 { animation-delay: -4.8s; }
-        .p13 { animation-delay: -6.0s; }
-        .p14 { animation-delay: -3.6s; }
-        .p17 { animation-delay: -5.1s; }
-        .p18 { animation-delay: -0.2s; }
 
         .photo-frame:nth-child(odd) { transform: rotate(-3deg); }
         .photo-frame:nth-child(even) { transform: rotate(3deg); }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
         
         .photo-frame:hover { 
-            transform: scale(1.15) rotate(0deg) !important; 
+            transform: scale(1.2) rotate(0deg) !important; 
             z-index: 100; 
             animation-play-state: paused; 
             opacity: 1 !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         @keyframes heartSurge {
             0%, 100% { transform: translate(0, 0) scale(1) rotate(inherit); opacity: 1; }
-            30% { transform: translate(2px, -3px) scale(1.02); opacity: 0.5; }
+            30% { transform: translate(2px, -3px) scale(1.02); opacity: 0.6; }
             60% { transform: translate(-1px, 2px) scale(0.98); opacity: 0.9; }
         }
 
-        /* 经过数学计算的对称爱心坐标 */
-        .p1  { left: 157px; top: 100px; z-index: 20; } /* 眉心 */
-        .p10 { left: 85px;  top: 55px;  } 
-        .p11 { left: 230px; top: 55px;  } 
-        .p2  { left: 15px;  top: 35px;  } /* 左峰 */
-        .p3  { left: 300px; top: 35px;  } /* 右峰 */
-        
-        .p4  { left: -25px; top: 110px; } 
-        .p12 { left: -40px; top: 200px; } 
-        .p6  { left: -15px; top: 290px; } 
+        /* 基于 450px 容器宽度的精准对称坐标 */
+        .p1  { left: 180px; top: 110px; z-index: 25; } 
+        .p10 { left: 105px; top: 60px;  } 
+        .p11 { left: 255px; top: 60px;  } 
+        .p2  { left: 30px;  top: 30px;  } 
+        .p3  { left: 330px; top: 30px;  } 
+        .p4  { left: -10px; top: 110px; } 
+        .p12 { left: -30px; top: 200px; } 
+        .p6  { left: 0px;   top: 290px; } 
+        .p5  { left: 370px; top: 110px; } 
+        .p13 { left: 390px; top: 200px; } 
+        .p7  { left: 360px; top: 290px; } 
+        .p17 { left: 50px;  top: 360px; } 
+        .p18 { left: 310px; top: 360px; } 
+        .p8  { left: 110px; top: 410px; } 
+        .p9  { left: 250px; top: 410px; } 
+        .p14 { left: 180px; top: 460px; z-index: 25; }
 
-        .p5  { left: 340px; top: 110px; } 
-        .p13 { left: 355px; top: 200px; } 
-        .p7  { left: 330px; top: 290px; } 
-
-        .p17 { left: 40px;  top: 365px; } 
-        .p18 { left: 275px; top: 365px; } 
-        
-        .p8  { left: 100px; top: 430px; } 
-        .p9  { left: 215px; top: 430px; } 
-        
-        .p14 { left: 157px; top: 490px; z-index: 15; } /* 底尖 */
+        /* 动画延迟错开 */
+        .p1 { animation-delay: -0.5s; } .p2 { animation-delay: -1.2s; }
+        .p3 { animation-delay: -2.8s; } .p4 { animation-delay: -4.1s; }
+        .p5 { animation-delay: -0.9s; } .p6 { animation-delay: -5.5s; }
+        .p7 { animation-delay: -3.2s; } .p8 { animation-delay: -6.7s; }
+        .p9 { animation-delay: -1.4s; } .p10 { animation-delay: -7.3s; }
+        .p11 { animation-delay: -2.1s; } .p12 { animation-delay: -4.8s; }
+        .p13 { animation-delay: -6.0s; } .p14 { animation-delay: -3.6s; }
+        .p17 { animation-delay: -5.1s; } .p18 { animation-delay: -0.2s; }
 
         .sticker { position: absolute; z-index: 20; pointer-events: none; }
-        .sticker img { width: 70px; height: 70px; }
+        .sticker img { width: 60px; height: 60px; }
         .s1 { top: 2%; left: 2%; } .s2 { top: 2%; right: 2%; } 
         .s3 { bottom: 12%; left: 2%; } .s4 { bottom: 12%; right: 2%; }
 
@@ -203,11 +159,10 @@
             transition: opacity 0.3s ease;
         }
         #image-preview-overlay.show { display: flex; opacity: 1; }
-        #preview-img {
-            max-width: 90%; max-height: 80%; border-radius: 10px;
-            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #preview-img { max-width: 90%; max-height: 80%; border-radius: 10px; transform: scale(0.8); transition: transform 0.3s; }
         #image-preview-overlay.show #preview-img { transform: scale(1); }
+        
+        .floating-wish { z-index: 40; }
     </style>
 </head>
 <body>
@@ -299,7 +254,6 @@
             const wish = document.createElement('div');
             wish.className = 'floating-wish';
             wish.style.left = Math.random() * 70 + 10 + '%';
-            wish.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
             wish.style.animationDuration = (Math.random() * 4 + 10) + 's';
             wish.onclick = (e) => {
                 e.stopPropagation();
@@ -324,11 +278,6 @@
             const modalText = document.getElementById('modal-text');
             modalText.innerText = content;
             modal.style.display = 'flex';
-            modal.onclick = () => {
-                modal.style.display = 'none';
-                document.getElementById('voice-player').pause();
-                document.getElementById('bgm').volume = 1.0;
-            };
         }
 
         function openPreview(src) {
